@@ -21,7 +21,7 @@ class Players:
             tmp.append(Player(i))
         return tmp
 
-    def p_length(self, self.players):
+    def p_length(self):
         return len(self.players)
 
     def get_players(self):
