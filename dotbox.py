@@ -3,8 +3,17 @@ import numpy as np
 
 class Line:
     def __init__(self, pts, owner=None):
-        self.pts = pts
+        self.pts = sorted(pts, key=lambda tup: [tup[0], tup[1]])
         self.owner = owner
+
+    def __eq__(self, line):
+        return (self.pts == line.get_pts())
+
+    def __repr__(self):
+        return 'Line({!r}, {!r})'.format(self.pts, self.owner)
+
+    def __str__(self):
+        return 'Line conntecting points {}, Owner is {}'.format(self.pts, self.owner)
 
     def own(self, owner):
         self.owner = owner
@@ -20,9 +29,6 @@ class Line:
             return 0
         else:
             return 1
-
-    def is_same(self, line):
-        return (self.pts == line.get_pts())
 
 
 class Box:
@@ -62,8 +68,9 @@ class Box:
 
 
 class Grid:
-    def __init__(self, dim):
+    def __init__(self, dim, players):
         self.dim = dim
+        self.players = players
         self.lines = []
         self.boxes = np.zeros((dim[0]-1, dim[1]-1))
         for row in range(dim[0]):
@@ -78,7 +85,7 @@ class Grid:
             for col in range(dim[1]-1):
                 self.boxes[row, col] = Box((row, col))
 
-    def is_full(self):
+    def game_over(self):
         #rows, cols = self.dim[0], self.dim[1]
         #max = 2*rows*cols - rows - cols
         # return (len(self.lines) == max)
@@ -99,10 +106,38 @@ class Grid:
             self.boxes[p1[0], p1[1]-1] = self.boxes[p1[0],
                                                     p1[1]].add_line(line)
 
+    def is_valid(self, line):
+        valid = True
+        p1, p2 = line.get_pts()[0], line.get_pts()[1]
+        valid = valid and ((p1[0] >= 0) and (p1[1] >= 0))
+        valid = valid and ((p2[0] >= 0) and (p2[1] >= 0))
+        valid = valid and ((p1[0] < self.dim[0]) and (p1[1] < self.dim[1]))
+        valid = valid and ((p2[0] < self.dim[0]) and (p2[1] < self.dim[1]))
+        current = self.lines[self.get_line_index(line)]
+        valid = valid and (current.get_owner() == None)
+        valid = valid and (line.get_owner() in self.players)
+        return valid
+
     def draw_line(self, line):
-        assert not self.is_full()
+        assert not self.game_over()
         index = self.get_line_index(line)
         current = self.lines[index]
         assert current.get_owner() == None
         self.lines[index] = line
         self.upd_boxes(line)
+        return line.get_pts()
+
+    def get_scores(self):
+        scores = {None: 0}
+        for p in self.players:
+            scores[p] = 0
+        for box in self.boxes:
+            scores[box.get_owner()] += 1
+        del scores[None]
+        return scores
+
+    def get_winner(self):
+        scores = self.get_scores()
+        m = max(scores, key=lambda key: scores[key])
+        winners = [k for k, v in scores.items() if v == scores[m]]
+        return winners
