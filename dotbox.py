@@ -29,6 +29,7 @@ class Box:
     def __init__(self, index, owner=None):
         self.index = index
         self.owner = None
+        self.lines = []
 
     def get_index(self):
         return self.index
@@ -40,9 +41,24 @@ class Box:
     def get_owner(self):
         return self.owner
 
+    def get_lines(self):
+        return self.lines
+
+    def get_line_count(self):
+        return len(self.lines)
+
     def is_edge(self, line):
         p1, p2 = line.get_pts()[0], line.get_pts()[1]
         return (p1 in self.get_corners()) and (p2 in self.get_corners())
+
+    def add_line(self, line):
+        assert self.is_edge(line)
+        assert self.get_line_count() < 4
+        exists = False
+        for l in self.lines:
+            exists = line.is_same(l)
+        assert not exists
+        self.lines = np.append(self.lines, line)
 
 
 class Grid:
@@ -52,10 +68,12 @@ class Grid:
         self.boxes = np.zeros((dim[0]-1, dim[1]-1))
         for row in range(dim[0]):
             for col in range(dim[1]):
-                if row < dim[0]-2:
-                    self.lines.append(Line([(row, col), (row+1, col)]))
-                if col < dim[1]-2:
-                    self.lines.append(Line([(row, col), (row, col+1)]))
+                if row < dim[0]-1:
+                    self.lines = np.append(
+                        self.lines, Line([(row, col), (row+1, col)]))
+                if col < dim[1]-1:
+                    self.lines = np.append(
+                        self.lines, Line([(row, col), (row, col+1)]))
         for row in range(dim[0]-1):
             for col in range(dim[1]-1):
                 self.boxes[row, col] = Box((row, col))
@@ -64,9 +82,27 @@ class Grid:
         #rows, cols = self.dim[0], self.dim[1]
         #max = 2*rows*cols - rows - cols
         # return (len(self.lines) == max)
-        count = len(np.where(Line.get_owner(self.lines) == None))
-        return (count == 0)
+        owners = [l.get_owner() for l in self.lines]
+        return not (None in owners)
+
+    def get_line_index(self, line):
+        pts = [l.get_pts() for l in self.lines]
+        return np.where(pts[0] == line.get_pts())[0]
+
+    def upd_boxes(self, line):
+        p1 = line.get_pts()[0]
+        self.boxes[p1[0], p1[1]] = self.boxes[p1[0], p1[1]].add_line(line)
+        if (line.get_dir() == 0) and (p1[0] != 0):
+            self.boxes[p1[0]-1, p1[1]] = self.boxes[p1[0],
+                                                    p1[1]].add_line(line)
+        elif (line.get_dir() == 1) and (p1[1] != 0):
+            self.boxes[p1[0], p1[1]-1] = self.boxes[p1[0],
+                                                    p1[1]].add_line(line)
 
     def draw_line(self, line):
         assert not self.is_full()
-        index = np.where(self.lines)
+        index = self.get_line_index(line)
+        current = self.lines[index]
+        assert current.get_owner() == None
+        self.lines[index] = line
+        self.upd_boxes(line)
