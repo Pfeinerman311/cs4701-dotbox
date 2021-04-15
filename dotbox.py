@@ -106,7 +106,7 @@ class Grid:
         score = 0
         if self.boxes[p1].add_line(line):
             score += 1
-        if (line.get_dir() == 0) and (p1/self.dim[1] > 0):
+        if (line.get_dir() == 0) and (p1/self.dim[1] >= 1):
             if self.boxes[p1-self.dim[1]].add_line(line):
                 score += 1
         elif (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
