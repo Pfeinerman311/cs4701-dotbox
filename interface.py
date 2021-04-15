@@ -280,3 +280,9 @@ class Ui:
             # self.user_move()
             self.disp_board()
             pygame.display.update()
+
+    def rerun(self):
+        self.SURF.fill((255, 255, 255))
+        self.disp_board()
+        pygame.display.update()
+        self.check_complete()
