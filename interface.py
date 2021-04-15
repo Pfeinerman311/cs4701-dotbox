@@ -118,8 +118,8 @@ class Ui:
 
     def move(self, is_user, id1, id2):
 
-        self.board[id_to_index(id1)].partners.append(id2)
-        self.board[id_to_index(id2)].partners.append(id1)
+        self.board[self.id_to_index(id1)].partners.append(id2)
+        self.board[self.id_to_index(id2)].partners.append(id1)
         # self.moves_done.append((id1, id2))
         # self.moves_done_persons.append(is_user)
         # return check_move_made_box(is_user, id1, id2)
@@ -152,13 +152,13 @@ class Ui:
         #             pygame.quit()
         #             sys.exit()
 
-        #     self.SURF.fill((255, 255, 255))
-        #     self.is_user_turn = True
-        #     self.disp_board()
-        #     pygame.display.update()
-        #     # self.user_move()
-        #     self.disp_board()
-        #     pygame.display.update()
+        self.SURF.fill((255, 255, 255))
+        self.is_user_turn = True
+        self.disp_board()
+        pygame.display.update()
+        # self.user_move()
+        self.disp_board()
+        pygame.display.update()
 
     def rerun(self):
         self.SURF.fill((255, 255, 255))

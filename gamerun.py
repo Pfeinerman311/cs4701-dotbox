@@ -5,6 +5,29 @@ import interface
 import pygame
 
 
+def player_move(players, game_state, gui, player):
+    # player = (player + 1) % 1
+    player = 0
+
+    try:
+        p1, p2 = map(int, input(
+            "What move do you want to make?").split(","))
+    except ValueError:
+        print("Invalid move - not provided two numbers with a comma inbetween")
+    else:
+        print(len(players.get_players()))
+        line = dotbox.Line((p1, p2), players.get_players()[player])
+        try:
+            attempt = game_state.draw_line(line)[0]
+        except AssertionError:
+            print("Invalid move - Assertion Error")
+        else:
+            gui.move(True, p1, p2)
+
+            if attempt:
+                print("You scored!.")
+
+
 def play_game(n):
     players = users.Players(n)
     game_state = dotbox.Grid((4, 4), players)  # init 9 - might change
@@ -16,28 +39,9 @@ def play_game(n):
         gui.is_user_turn = True
         gui.disp_board()
         gui.update_pygame()
+        player_move(players, game_state, gui, player)
         gui.disp_board()
         gui.update_pygame()
-        # player = (player + 1) % 1
-        player = 0
-
-        try:
-            p1, p2 = map(int, input(
-                "What move do you want to make?").split(","))
-        except ValueError:
-            print("Invalid move - not provided two numbers with a comma inbetween")
-        else:
-            print(len(players.get_players()))
-            line = dotbox.Line((p1, p2), players.get_players()[player])
-            try:
-                attempt = game_state.draw_line(line)
-            except AssertionError:
-                print("Invalid move - Assertion Error")
-            else:
-                gui.move(True, p1, p2)
-
-                if attempt:
-                    print("You scored! Have another turn.")
 
 
 # Start of game:
