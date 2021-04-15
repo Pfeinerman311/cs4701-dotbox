@@ -103,17 +103,17 @@ class Grid:
 
     def upd_boxes(self, line):
         p1 = line.get_pts()[0]
-        score = 0
+        filled = {}
         if (p1 % self.dim[1] < self.dim[1]-1) and (p1 / self.dim[0] < self.dim[0]-1):
             if self.boxes[p1].add_line(line, self.dim):
-                score += 1
+                filled[p1] = self.boxes[p1]
         if (line.get_dir() == 0) and (p1/self.dim[1] >= 1):
             if self.boxes[p1-self.dim[1]].add_line(line, self.dim):
-                score += 1
+                filled[p1-self.dim[1]] = self.boxes[p1-self.dim[1]]
         elif (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
             if self.boxes[p1-1].add_line(line, self.dim):
-                score += 1
-        return score
+                filled[p1-1] = self.boxes[p1-1]
+        return filled
 
     def is_valid(self, line):
         valid = True
@@ -134,9 +134,10 @@ class Grid:
         current = self.lines[key]
         assert current.get_owner() == None
         self.lines[key] = line
-        if self.upd_boxes(line) > 0:
+        filled = self.upd_boxes(line)
+        if len(filled) > 0:
             scored = True
-        return scored, line.get_pts()
+        return scored, line.get_pts(), filled
 
     def get_scores(self):
         scores = {None: 0}
