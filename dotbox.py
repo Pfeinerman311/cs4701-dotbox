@@ -25,7 +25,7 @@ class Line:
         return self.owner
 
     def get_dir(self):
-        if self.pts[0] - self.pts[1] == 1:
+        if self.pts[1] - self.pts[0] == 1:
             return 0
         else:
             return 1
@@ -80,12 +80,12 @@ class Grid:
         self.boxes = {}
         for row in range(dim[0]):
             for col in range(dim[1]):
-                if row < dim[0]-1:
-                    self.lines[(row*dim[1]+col, (row+1)*dim[1]+col)] = Line(
-                        (row*dim[1]+col, (row+1)*dim[1]+col))
                 if col < dim[1]-1:
                     self.lines[(row*dim[1]+col, row*dim[1]+col+1)] = Line(
                         (row*dim[1]+col, row*dim[1]+col+1))
+                if row < dim[0]-1:
+                    self.lines[(row*dim[1]+col, (row+1)*dim[1]+col)] = Line(
+                        (row*dim[1]+col, (row+1)*dim[1]+col))
         for row in range(dim[0]-1):
             for col in range(dim[1]-1):
                 self.boxes[row*dim[1]+col] = Box(row*dim[1]+col)
@@ -128,6 +128,7 @@ class Grid:
     def draw_line(self, line):
         scored = False
         assert not self.game_over()
+        assert self.is_valid(line)
         key = line.get_pts()
         current = self.lines[key]
         assert current.get_owner() == None
