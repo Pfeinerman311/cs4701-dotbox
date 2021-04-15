@@ -40,12 +40,20 @@ class Box:
     def get_index(self):
         return self.index
 
+    def get_owner(self):
+        return self.owner
+
+    def own(self, player):
+        assert self.owner == None
+        self.owner = player
+
     def get_corners(self, dim):
         i = self.index
         return [i, i+1, i+dim[1], i+dim[1]+1]
 
-    def get_owner(self):
-        return self.owner
+    def get_edges(self, dim):
+        c = self.get_corners(dim)
+        return [(c[0], c[1]), (c[1], c[2]), (c[2], c[3]), (c[3], c[0])]
 
     def get_lines(self):
         return self.lines
@@ -101,18 +109,36 @@ class Grid:
         pts = [l.get_pts() for l in self.lines]
         return np.where(pts[0] == line.get_pts())[0]
 
+    def box_corners(self, index):
+        return [index, index+1, index+self.dim[1], index+self.dim[1]+1]
+
+    def box_edges(self, index):
+        c = self.box_corners(index)
+        return [(c[0], c[1]), (c[1], c[2]), (c[2], c[3]), (c[3], c[0])]
+
+    def check_box(self, index):
+        filled = 1
+        edges = self.box_edges(index)
+        for e in edges:
+            if self.lines[e].get_owner() == None:
+                filled = 0
+        if self.boxes[index].get_owner() != None:
+            filled = 2
+        return filled
+
     def upd_boxes(self, line):
         p1 = line.get_pts()[0]
+        player = line.get_owner()
         filled = {}
         if (p1 % self.dim[1] < self.dim[1]-1) and (p1 / self.dim[0] < self.dim[0]-1):
-            if self.boxes[p1].add_line(line, self.dim):
-                filled[p1] = self.boxes[p1]
+            if self.check_box(p1) == 1:
+                filled[p1] = self.boxes[p1].own(player)
         if (line.get_dir() == 0) and (p1/self.dim[1] >= 1):
-            if self.boxes[p1-self.dim[1]].add_line(line, self.dim):
-                filled[p1-self.dim[1]] = self.boxes[p1-self.dim[1]]
+            if self.check_box(p1-self.dim[1]) == 1:
+                filled[p1-self.dim[1]] = self.boxes[p1-self.dim[1]].own(player)
         elif (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
-            if self.boxes[p1-1].add_line(line, self.dim):
-                filled[p1-1] = self.boxes[p1-1]
+            if self.check_box(p1-1) == 1:
+                filled[p1-1] = self.boxes[p1-1].own(player)
         return filled
 
     def is_valid(self, line):
