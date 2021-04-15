@@ -72,7 +72,7 @@ class Grid:
         self.dim = dim
         self.players = players
         self.lines = {}
-        self.boxes = np.zeros((dim[0]-1, dim[1]-1))
+        self.boxes = np.empty((dim[0]-1, dim[1]-1), dtype=Box)
         for row in range(dim[0]):
             for col in range(dim[1]):
                 if row < dim[0]-1:
