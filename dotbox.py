@@ -94,7 +94,7 @@ class Grid:
         # rows, cols = self.dim[0], self.dim[1]
         # max = 2*rows*cols - rows - cols
         # return (len(self.lines) == max)
-        owners = [l.get_owner() for l in self.lines]
+        owners = [l.get_owner() for l in self.lines.values()]
         return not (None in owners)
 
     def get_line_index(self, line):
