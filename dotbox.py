@@ -3,7 +3,7 @@ import numpy as np
 
 class Line:
     def __init__(self, pts, owner=None):
-        self.pts = tuple(sorted(pts, key=lambda tup: [tup[0], tup[1]]))
+        self.pts = tuple(sorted(pts))
         self.owner = owner
 
     def __eq__(self, line):
@@ -25,7 +25,7 @@ class Line:
         return self.owner
 
     def get_dir(self):
-        if self.pts[0][0] == self.pts[1][0]:
+        if self.pts[0] - self.pts[1] == 1:
             return 0
         else:
             return 1
@@ -40,9 +40,9 @@ class Box:
     def get_index(self):
         return self.index
 
-    def get_corners(self):
-        r, c = self.index[0], self.index[1]
-        return [(r, c), (r, c+1), (r+1, c), (r+1, c+1)]
+    def get_corners(self, dim):
+        i = self.index
+        return [i, i+1, i+dim[1], i+dim[1]+1]
 
     def get_owner(self):
         return self.owner
@@ -53,18 +53,23 @@ class Box:
     def get_line_count(self):
         return len(self.lines)
 
-    def is_edge(self, line):
+    def is_edge(self, line, dim):
         p1, p2 = line.get_pts()[0], line.get_pts()[1]
-        return (p1 in self.get_corners()) and (p2 in self.get_corners())
+        return (p1 in self.get_corners(dim)) and (p2 in self.get_corners(dim))
 
-    def add_line(self, line):
-        assert self.is_edge(line)
+    def add_line(self, line, dim):
+        assert self.is_edge(line, dim)
         assert self.get_line_count() < 4
         exists = False
         for l in self.lines:
             exists = line.is_same(l)
         assert not exists
         self.lines = np.append(self.lines, line)
+        if self.get_line_count() == 4:
+            self.owner = line.get_owner()
+            return True
+        else:
+            return False
 
 
 class Grid:
@@ -72,18 +77,18 @@ class Grid:
         self.dim = dim
         self.players = players
         self.lines = {}
-        self.boxes = np.empty((dim[0]-1, dim[1]-1), dtype=Box)
+        self.boxes = {}
         for row in range(dim[0]):
             for col in range(dim[1]):
                 if row < dim[0]-1:
-                    self.lines[(row, col), (row+1, col)] = Line(
-                        ((row, col), (row+1, col)))
+                    self.lines[(row*dim[1]+col, (row+1)*dim[1]+col)] = Line(
+                        (row*dim[1]+col, (row+1)*dim[1]+col))
                 if col < dim[1]-1:
-                    self.lines[(row, col), (row, col+1)] = Line(
-                        ((row, col), (row, col+1)))
+                    self.lines[(row*dim[1]+col, row*dim[1]+col+1)] = Line(
+                        (row*dim[1]+col, row*dim[1]+col+1))
         for row in range(dim[0]-1):
             for col in range(dim[1]-1):
-                self.boxes[row, col] = Box((row, col))
+                self.boxes[row*dim[1]+col] = Box(row*dim[1]+col)
 
     def game_over(self):
         # rows, cols = self.dim[0], self.dim[1]
@@ -98,34 +103,38 @@ class Grid:
 
     def upd_boxes(self, line):
         p1 = line.get_pts()[0]
-        self.boxes[p1[0], p1[1]] = self.boxes[p1[0], p1[1]].add_line(line)
-        if (line.get_dir() == 0) and (p1[0] != 0):
-            self.boxes[p1[0]-1, p1[1]] = self.boxes[p1[0],
-                                                    p1[1]].add_line(line)
-        elif (line.get_dir() == 1) and (p1[1] != 0):
-            self.boxes[p1[0], p1[1]-1] = self.boxes[p1[0],
-                                                    p1[1]].add_line(line)
+        score = 0
+        if self.boxes[p1].add_line(line):
+            score += 1
+        if (line.get_dir() == 0) and (p1/self.dim[1] > 0):
+            if self.boxes[p1-self.dim[1]].add_line(line):
+                score += 1
+        elif (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
+            if self.boxes[p1-1].add_line(line):
+                score += 1
+        return score
 
     def is_valid(self, line):
         valid = True
         p1, p2 = line.get_pts()[0], line.get_pts()[1]
-        valid = valid and ((p1[0] >= 0) and (p1[1] >= 0))
-        valid = valid and ((p2[0] >= 0) and (p2[1] >= 0))
-        valid = valid and ((p1[0] < self.dim[0]) and (p1[1] < self.dim[1]))
-        valid = valid and ((p2[0] < self.dim[0]) and (p2[1] < self.dim[1]))
+        valid = valid and ((p2-p1 == 1) or (p2-p1 == self.dim[1]))
+        valid = valid and ((p1 >= 0) and (p1 < self.dim[0]*self.dim[1]))
+        valid = valid and ((p2 >= 0) and (p2 < self.dim[0]*self.dim[1]))
         current = self.lines[line.get_pts()]
         valid = valid and (current.get_owner() == None)
         valid = valid and (line.get_owner() in self.players)
         return valid
 
     def draw_line(self, line):
+        scored = False
         assert not self.game_over()
         key = line.get_pts()
         current = self.lines[key]
         assert current.get_owner() == None
         self.lines[key] = line
-        self.upd_boxes(line)
-        return line.get_pts()
+        if self.upd_boxes(line) > 0:
+            scored = True
+        return scored, line.get_pts()
 
     def get_scores(self):
         scores = {None: 0}
