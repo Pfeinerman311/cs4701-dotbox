@@ -62,7 +62,7 @@ class Box:
         assert self.get_line_count() < 4
         exists = False
         for l in self.lines:
-            exists = line.is_same(l)
+            exists = l == line
         assert not exists
         self.lines = np.append(self.lines, line)
         if self.get_line_count() == 4:
