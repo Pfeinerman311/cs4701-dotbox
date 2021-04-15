@@ -116,24 +116,6 @@ class Ui:
                 self.SURF.blit(self.BOX_COMPUTER, (x1 + 50 - text_width /
                                                    2, y1 + 50 - text_height / 2))
 
-    # def is_connection(self, id1, id2):
-    #     if (id1, id2) in self.moves_done:
-    #         return True
-    #     if (id2, id1) in self.moves_done:
-    #         return True
-    #     return False
-
-    # def is_valid(self, id1, id2):
-    #     if is_connection(id1, id2):
-    #         return False
-    #     p1 = self.board[id_to_index(id1)]
-    #     p2 = self.board[id_to_index(id2)]
-    #     if (p1.x == p2.x + 100 or p1.x == p2.x - 100) and p1.y == p2.y:
-    #         return True
-    #     if p1.x == p2.x and (p1.y == p2.y + 100 or p1.y == p2.y - 100):
-    #         return True
-    #     return False
-
     def move(self, is_user, id1, id2):
 
         self.board[id_to_index(id1)].partners.append(id2)
@@ -141,44 +123,6 @@ class Ui:
         # self.moves_done.append((id1, id2))
         # self.moves_done_persons.append(is_user)
         # return check_move_made_box(is_user, id1, id2)
-
-    # def possible_moves(self):
-    #     possible = []
-    #     for a in range(1, len(board)):
-    #         for b in list(range(1, len(self.board))):
-    #             if b == a:
-    #                 continue
-    #             if not is_valid(a, b):
-    #                 continue
-    #             possible.append((a, b))
-    #     return possible
-
-    # def count_connections_box(self, box):
-
-    #     count = 0
-    #     not_connections = []
-    #     if is_connection(box[0], box[1]):
-    #         count += 1
-    #     else:
-    #         not_connections.append((box[0], box[1]))
-    #         not_connections.append((box[1], box[0]))
-    #     if is_connection(box[1], box[3]):
-    #         count += 1
-    #     else:
-    #         not_connections.append((box[1], box[3]))
-    #         not_connections.append((box[3], box[1]))
-    #     if is_connection(box[2], box[3]):
-    #         count += 1
-    #     else:
-    #         not_connections.append((box[2], box[3]))
-    #         not_connections.append((box[3], box[2]))
-    #     if is_connection(box[2], box[0]):
-    #         count += 1
-    #     else:
-    #         not_connections.append((box[2], box[0]))
-    #         not_connections.append((box[0], box[2]))
-
-    #     return (count, not_connections)
 
     # def check_complete(self):
     #     possible = possible_moves()
@@ -195,71 +139,6 @@ class Ui:
     #         input("Press enter to end game:")
     #         pygame.quit()
     #         sys.exit()
-
-    # def move_makes_box(self, id1, id2):
-    #     is_box = False
-
-    #     for i, box in enumerate(boxes):
-    #         temp = list(box[:-1])
-
-    #         if id1 not in temp or id2 not in temp:
-    #             continue
-
-    #         temp.remove(id1)
-    #         temp.remove(id2)
-
-    #         if is_connection(temp[0], temp[1]):
-    #             if (is_connection(id1, temp[0]) and is_connection(id2, temp[1])) or (is_connection(id1, temp[1]) and is_connection(id2, temp[0])):
-    #                 is_box = True
-
-    #     return is_box
-
-    # def check_move_made_box(self, is_user, id1, id2):
-    #     is_box = False
-    #     for i, box in enumerate(boxes):
-    #         temp = list(box[:-1])
-    #         if id1 not in temp or id2 not in temp:
-    #             continue
-    #         temp.remove(id1)
-    #         temp.remove(id2)
-    #         if is_connection(temp[0], temp[1]) and ((is_connection(id1, temp[0]) and is_connection(id2, temp[1])) or
-    #                                                 (is_connection(id1, temp[1]) and is_connection(id2, temp[0]))):
-
-    #             if is_user:
-    #                 score[0] += 1
-    #                 boxes[i][4] = OWNER_USER
-    #             else:
-    #                 score[1] + 1
-    #                 boxes[i][4] = OWNER_COMPUTER
-    #             is_box = True
-
-    #     return is_box
-
-    # def user_move(self,):
-    #     try:
-    #         p1, p2 = map(int, input(
-    #             "What move do you want to make?").split(","))
-    #     except ValueError:
-    #         print("Invalid move.")
-    #         user_move()
-    #     else:
-    #         if is_connection(p1, p2):
-    #             print("Sorry, this move is already taken.")
-    #             user_move()
-    #         elif not is_valid(p1, p2):
-    #             print("Invalid move.")
-    #             user_move()
-    #         else:
-    #             is_box = move(True, p1, p2)
-    #             check_complete()
-
-    #             if is_box:
-    #                 print("You scored! Have another turn.")
-    #                 SURF.fill((255, 255, 255))
-    #                 disp_board()
-    #                 pygame.display.update()
-    #                 check_complete()
-    #                 user_move()
 
     def start(self):
         self.SURF.fill((255, 255, 255))
