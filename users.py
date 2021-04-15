@@ -18,8 +18,7 @@ class Players:
     def init_players(self, n):
         tmp = []
         for i in n:
-            tmp.append(Player(i))
-        return tmp
+            self.players.append(Player(i))
 
     def p_length(self):
         return len(self.players)
