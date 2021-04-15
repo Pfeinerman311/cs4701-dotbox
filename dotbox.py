@@ -104,7 +104,7 @@ class Grid:
     def upd_boxes(self, line):
         p1 = line.get_pts()[0]
         score = 0
-        if p1 % self.dim[1] < self.dim[1]-1:
+        if (p1 % self.dim[1] < self.dim[1]-1) and (p1 / self.dim[0] < self.dim[0]-1):
             if self.boxes[p1].add_line(line, self.dim):
                 score += 1
         if (line.get_dir() == 0) and (p1/self.dim[1] >= 1):
