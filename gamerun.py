@@ -1,18 +1,38 @@
 # A module to run the lines and dots game
 import dotbox
-import players
+import users
+import interface
+import pygame
 
 
 def play_game(n):
-    players = players.Players(n)
-    game_state = dotbox.Grid(9)  # init 9 - might change
-    while game_state.full():
-        for p in n:
-            print("Player "+string(p.get_id()) + "choose your line:")
-            line = input()
-            game_state.turn(p.get_id(), line)
+    players = users.Players(n)
+    # game_state = dotbox.Grid([4, 4], players)  # init 9 - might change
+    gui = interface.Ui(4, 4)
+    gui.start()
+    while True:
+        try:
+            p1, p2 = map(int, input(
+                "What move do you want to make?").split(","))
+        except ValueError:
+            print("Invalid move")
+        else:
+            if gui.is_connection(p1, p2):
+                print("Sorry, this move is already taken.")
 
-    print("Congrats! The game is over")
+            elif not gui.is_valid(p1, p2):
+                print("Invalid move.")
+
+            else:
+                is_box = gui.move(True, p1, p2)
+                gui.check_complete()
+
+                if is_box:
+                    print("You scored! Have another turn.")
+                    gui.SURF.fill((255, 255, 255))
+                    gui.disp_board()
+                    pygame.display.update()
+                    gui.check_complete()
 
 
 # Start of game:
@@ -20,6 +40,7 @@ def main():
     print("Welcome to Dots and Boxes.")
     print("How many players are playing?")
     n = input()
+
     play_game(n)
 
 
