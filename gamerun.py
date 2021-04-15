@@ -12,32 +12,39 @@ def play_game(n):
     gui.start()
     player = 1
     while True:
-        player = player+1 % 1
+        gui.SURF.fill((255, 255, 255))
+        gui.is_user_turn = True
+        gui.disp_board()
+        gui.update_pygame()
+        gui.disp_board()
+        gui.update_pygame()
+        # player = (player + 1) % 1
+        player = 0
+
         try:
             p1, p2 = map(int, input(
                 "What move do you want to make?").split(","))
         except ValueError:
-            print("Invalid move")
+            print("Invalid move - not provided two numbers with a comma inbetween")
         else:
-            line = game_state.Line(p1, p2), players[player])
+            print(len(players.get_players()))
+            line = dotbox.Line((p1, p2), players.get_players()[player])
             try:
-                attempt=game_state.draw_line(line)
-            except AssertionError
-                print("Invalid move")
-            else
+                attempt = game_state.draw_line(line)
+            except AssertionError:
+                print("Invalid move - Assertion Error")
+            else:
                 gui.move(True, p1, p2)
 
-
-                if is_box:
+                if attempt:
                     print("You scored! Have another turn.")
-                    gui.rerun()
 
 
 # Start of game:
 def main():
     print("Welcome to Dots and Boxes.")
     print("How many players are playing?")
-    n=input()
+    n = input()
 
     play_game(n)
 
