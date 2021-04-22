@@ -110,7 +110,7 @@ class Grid:
         return np.where(pts[0] == line.get_pts())[0]
 
     def box_corners(self, index):
-        return [index, index+1, index+self.dim[1], index+self.dim[1]+1]
+        return [index, index+1, index+self.dim[1]+1, index+self.dim[1]]
 
     def box_edges(self, index):
         c = self.box_corners(index)
