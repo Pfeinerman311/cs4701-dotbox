@@ -17,52 +17,43 @@ class Ui:
         self.BLACK = (0, 0, 0)
         self.RED = (255, 0, 0)
         self.BLUE = (0, 0, 255)
-
-        self.OWNER_NONE = 0
         self.OWNER_USER = 1
         self.OWNER_COMPUTER = 2
-
         self.Point = namedtuple('Point', ['id', 'x', 'y', 'partners'])
 
         pygame.init()
         pygame.font.init()
+        pygame.display.set_caption("Dots and  Boxes")
         self.font = pygame.font.SysFont('Arial', 50)
         self.score_font = pygame.font.SysFont('Arial', 30)
         self.dot_font = pygame.font.SysFont('Arial', 15)
 
         self.BOX_USER = self.font.render('U', True, self.BLUE)
         self.BOX_COMPUTER = self.font.render('C', True, self.RED)
-        self.spoke1 = [(2, 6), (10, 11), (9, 13), (4, 5)]
-        self.spoke2 = [(1, 5), (6, 7), (10, 14), (8, 9)]
-
+        self.point1 = [(2, 6), (10, 11), (9, 13), (4, 5)]
+        self.point2 = [(1, 5), (6, 7), (10, 14), (8, 9)]
         self.size = self.BOARDSIZE * 100 + 100
+
         self.SURF = pygame.display.set_mode((self.size, self.size))
-        pygame.display.set_caption("Dots and  Boxes")
 
         self.clock = pygame.time.Clock()
 
         self.board = []
+        # Adding Points
         for i in range(self.BOARDSIZE):
-            for i2 in range(self.BOARDSIZE):
-
+            for j in range(self.BOARDSIZE):
                 self.board.append(
-                    self.Point(self.BOARDSIZE * i + i2, i2 * 100 + 100, i * 100 + 100, []))
+                    self.Point(self.BOARDSIZE * i + j, j * 100 + 100, i * 100 + 100, []))
         self.moves_done = []
         self.moves_done_persons = []
-        self.boxes = [[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, self.OWNER_NONE]
+        self.boxes = [[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, 0]
                       for i in range(0, 3)]
-        self.boxes.extend([[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, self.OWNER_NONE]
+        self.boxes.extend([[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, 0]
                            for i in range(4, 7)])
-        self.boxes.extend([[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, self.OWNER_NONE]
+        self.boxes.extend([[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, 0]
                            for i in range(8, 11)])
         self.score = [0, 0]
         self.is_user_turn = True
-
-    def id_to_index(self, _id):
-        for i in range(len(self.board)):
-            if self.board[i].id == _id:
-                return i
-        return -1
 
     def disp_board(self):
         self.score_user = self.score_font.render(
@@ -105,52 +96,17 @@ class Ui:
             dot_num = self.dot_font.render(str(i), True, self.BLACK)
             self.SURF.blit(dot_num, (point.x + 10, point.y - 20))
         for box in self.boxes:
+            print("box is "+str(box))
 
-            x1 = self.board[self.id_to_index(box[0])].x
+        x1 = self.board[self.id_to_index(box)].x
 
-            y1 = self.board[self.id_to_index(box[0])].y
+        y1 = self.board[self.id_to_index(box)].y
 
-            if box[4] == self.OWNER_USER:
-                text_width, text_height = self.font.size("U")
-                self.SURF.blit(self.BOX_USER, (x1 + 50 - text_width /
+        if box[4] == self.OWNER_USER:
+            text_width, text_height = self.font.size("U")
+            self.SURF.blit(self.BOX_USER, (x1 + 50 - text_width /
+                                           2, y1 + 50 - text_height / 2))
+        elif box[4] == self.OWNER_COMPUTER:
+            text_width, text_height = self.font.size("C")
+            self.SURF.blit(self.BOX_COMPUTER, (x1 + 50 - text_width /
                                                2, y1 + 50 - text_height / 2))
-            elif box[4] == self.OWNER_COMPUTER:
-                text_width, text_height = self.font.size("C")
-                self.SURF.blit(self.BOX_COMPUTER, (x1 + 50 - text_width /
-                                                   2, y1 + 50 - text_height / 2))
-
-    def move(self, is_user, id1, id2):
-        self.board[self.id_to_index(id1)].partners.append(id2)
-        self.board[self.id_to_index(id2)].partners.append(id1)
-        self.moves_done.append((id1, id2))
-        self.moves_done_persons.append(is_user)
-
-    def start(self):
-        self.SURF.fill((255, 255, 255))
-        self.disp_board()
-        pygame.display.update()
-
-    def fill_box(self, boxe):
-        # print("box2 is "+str(list(boxe)))
-        for i, box in enumerate(self.boxes[int(list(boxe)[0]):int(list(boxe)[0])+1]):
-            print("param is")
-
-            print(int(list(boxe)[0]))
-            print("in for loop")
-
-            self.score[0] += 1
-            tmp = int(list(boxe)[0])//4
-
-            self.boxes[i+int(list(boxe)[0])-tmp][4] = self.OWNER_USER
-            print("adding box for")
-            print(self.boxes[i])
-
-            self.is_box = True
-
-    def rerun(self):
-        self.SURF.fill((255, 255, 255))
-        self.disp_board()
-        pygame.display.update()
-
-    def update_pygame(self):
-        pygame.display.update()
