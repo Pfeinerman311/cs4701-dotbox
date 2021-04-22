@@ -114,7 +114,7 @@ class Grid:
 
     def box_edges(self, index):
         c = self.box_corners(index)
-        return [(c[0], c[1]), (c[1], c[2]), (c[2], c[3]), (c[3], c[0])]
+        return [(c[0], c[1]), (c[1], c[2]), (c[3], c[2]), (c[0], c[3])]
 
     def check_box(self, index):
         filled = 1
