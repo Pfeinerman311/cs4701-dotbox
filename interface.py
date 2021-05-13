@@ -131,6 +131,12 @@ class Ui:
         pygame.display.update()
 
     def fill_box(self, boxe):
+        # print("in fill box")
+        # print("boxe is")
+        # print(str(boxe))
+        print("boxes is")
+        print(self.boxes)
+
         # print("box2 is "+str(list(boxe)))
         for i, box in enumerate(self.boxes[int(list(boxe)[0]):int(list(boxe)[0])+1]):
             print("param is")
