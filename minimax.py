@@ -17,10 +17,11 @@ def minimax(gameState,
 
     # Maximizer's Turn
     if (maxTurn):
-        return max(minimax(gameState,
-                           False,  player),
-                   minimax(gameState,
-                           False, player))
+        vals = []
+        for move in gameState.get_valid_moves():
+            vals.append(minimax(gameState.test_move(move), False, NEXT PLAYER))
+        return max(vals)
+
     # Minimizer's Turn
     else:
         return min(minimax(gameState,
