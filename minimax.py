@@ -7,13 +7,13 @@ def value(x):
     return 0, "New State"
 
 
-def minimax(checkDepth, gameState,
+def minimax(gameState,
             maxTurn,
-            Depth):
+            player):
 
     # Presetting depth to check
-    if (checkDepth == Depth):
-        return value(nodeIndex)
+    if (gameState.isOver()):
+        return gameState.termval(player)
 
     # Maximizer's Turn
     if (maxTurn):
@@ -30,9 +30,6 @@ def minimax(checkDepth, gameState,
                            True,  Depth))
 
 
-treeDepth = 2
+def getMove(player, game_state, stop_search):
 
-
-def getMove(player, game_state):
-
-    minimax(0, game_state, True, treeDepth)
+    minimax(game_state, True,  player)
