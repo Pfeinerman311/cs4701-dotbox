@@ -200,12 +200,12 @@ class Grid:
         for w in self.get_winner():
             if scores[w] > to_win:
                 if w == player:
-                    return 100
+                    return tot_boxes
                 else:
-                    return -100
+                    return -tot_boxes
         threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
         num_threes = len(threes)
         if scores[player] + num_threes > to_win:
-            return 100
+            return tot_boxes
         else:
             return scores[player] + num_threes
