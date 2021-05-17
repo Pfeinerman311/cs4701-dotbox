@@ -189,3 +189,23 @@ class Grid:
         m = max(scores, key=lambda key: scores[key])
         winners = [k for k, v in scores.items() if v == scores[m]]
         return winners
+
+    def get_valid_moves(self, player):
+        valid = [k for k, v in self.lines.items() if v.get_owner() == None]
+
+    def val(self, player):
+        tot_boxes = len(self.boxes)
+        to_win = tot_boxes//2
+        scores = self.get_scores()
+        for w in self.get_winner():
+            if scores[w] > to_win:
+                if w == player:
+                    return 100
+                else:
+                    return -100
+        threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
+        num_threes = len(threes)
+        if scores[player] + num_threes > to_win:
+            return 100
+        else:
+            return scores[player] + num_threes
