@@ -116,28 +116,38 @@ class Grid:
         c = self.box_corners(index)
         return [(c[0], c[1]), (c[1], c[2]), (c[3], c[2]), (c[0], c[3])]
 
+    # def check_box(self, index):
+    #     filled = 1
+    #     edges = self.box_edges(index)
+    #     for e in edges:
+    #         if self.lines[e].get_owner() == None:
+    #             filled = 0
+    #     if self.boxes[index].get_owner() != None:
+    #         filled = 2
+    #     return filled
+
     def check_box(self, index):
-        filled = 1
+        lines = 0
         edges = self.box_edges(index)
         for e in edges:
-            if self.lines[e].get_owner() == None:
-                filled = 0
+            if self.lines[e].get_owner() != None:
+                lines += 1
         if self.boxes[index].get_owner() != None:
-            filled = 2
-        return filled
+            lines = -1
+        return lines
 
     def upd_boxes(self, line):
         p1 = line.get_pts()[0]
         player = line.get_owner()
         filled = {}
         if (p1 % self.dim[1] < self.dim[1]-1) and (p1 / self.dim[0] < self.dim[0]-1):
-            if self.check_box(p1) == 1:
+            if self.check_box(p1) == 4:
                 filled[p1] = self.boxes[p1].own(player)
         if (line.get_dir() == 0) and (p1/self.dim[1] >= 1):
-            if self.check_box(p1-self.dim[1]) == 1:
+            if self.check_box(p1-self.dim[1]) == 4:
                 filled[p1-self.dim[1]] = self.boxes[p1-self.dim[1]].own(player)
         elif (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
-            if self.check_box(p1-1) == 1:
+            if self.check_box(p1-1) == 4:
                 filled[p1-1] = self.boxes[p1-1].own(player)
         return filled
 
