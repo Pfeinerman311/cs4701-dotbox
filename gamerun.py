@@ -15,7 +15,6 @@ def player_move(players, game_state, gui, player):
     except ValueError:
         print("Invalid move - not provided two numbers with a comma inbetween")
     else:
-        # print(len(players.get_players()))
         line = dotbox.Line((p1, p2), players.get_players()[player])
         try:
             attempt = game_state.draw_line(line)
