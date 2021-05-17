@@ -245,6 +245,16 @@ class Grid:
         else:
             return scores[player] + num_threes
 
+    def is_over(self):
+        tot_boxes = len(self.boxes)
+        to_win = tot_boxes//2
+        scores = self.get_scores()
+        for w in self.get_winner():
+            if scores[w] > to_win:
+                return True
+        else:
+            return False
+
     def term_val(self, player):
         assert self.game_over()
         winners = self.get_winner()
