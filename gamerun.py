@@ -6,29 +6,34 @@ import pygame
 
 
 def player_move(players, game_state, gui, player):
-    # player = (player + 1) % 1
-    player = 0
+    #0 is player and 1 is AI
 
-    try:
-        p1, p2 = map(int, input(
-            "What move do you want to make?").split(","))
-    except ValueError:
-        print("Invalid move - not provided two numbers with a comma inbetween")
+    player = (player + 1) % 1
+    player_ob = players[player]
+    # player = 0
+    if (player == 1):
+        minimax(player_ob, game_state)
     else:
-        line = dotbox.Line((p1, p2), players.get_players()[player])
         try:
-            attempt = game_state.draw_line(line)
-            att = attempt[0]
-            box = attempt[2].keys()
-        except AssertionError:
-            print("Invalid move - Assertion Error")
+            p1, p2 = map(int, input(
+                "What move do you want to make?").split(","))
+        except ValueError:
+            print("Invalid move - not provided two numbers with a comma inbetween")
         else:
-            gui.move(True, p1, p2)
+            line = dotbox.Line((p1, p2), players.get_players()[player])
+            try:
+                attempt = game_state.draw_line(line)
+                att = attempt[0]
+                box = attempt[2].keys()
+            except AssertionError:
+                print("Invalid move - Assertion Error")
+            else:
+                gui.move(True, p1, p2)
 
-            if att:
-                print("You scored!.")
-                # print("box in gamerun is "+str(type(box)))
-                gui.fill_box(box)
+                if att:
+                    print("You scored!.")
+                    # print("box in gamerun is "+str(type(box)))
+                    gui.fill_box(box)
 
 
 def play_game(n):

@@ -24,7 +24,7 @@ def minimax(checkDepth, gameState,
                            False, Depth))
     # Minimizer's Turn
     else:
-        return min(minimax(checkDepth + 1, gameState
+        return min(minimax(checkDepth + 1, gameState,
                            True,  Depth),
                    minimax(checkDepth + 1, gameState,
                            True,  Depth))
@@ -32,4 +32,7 @@ def minimax(checkDepth, gameState,
 
 treeDepth = 2
 
-print(minimax(0, 0, True, treeDepth))
+
+def getMove(player, game_state):
+
+    minimax(0, game_state, True, treeDepth)
