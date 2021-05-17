@@ -193,7 +193,7 @@ class Grid:
     def get_valid_moves(self):
         valid = [k for k, v in self.lines.items() if v.get_owner() == None]
 
-    def val(self, player):
+    def state_val(self, player):
         tot_boxes = len(self.boxes)
         to_win = tot_boxes//2
         scores = self.get_scores()
@@ -209,3 +209,34 @@ class Grid:
             return tot_boxes
         else:
             return scores[player] + num_threes
+
+    def val(self, move):
+        assert self.is_valid(move)
+        player = move.get_owner()
+        tot_boxes = len(self.boxes)
+        to_win = tot_boxes//2
+        scores = self.get_scores()
+        for w in self.get_winner():
+            if scores[w] > to_win:
+                if w == player:
+                    return tot_boxes
+                else:
+                    return -tot_boxes
+        new_grid = self
+        threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
+        num_threes = len(threes)
+        if scores[player] + num_threes > to_win:
+            return tot_boxes
+        else:
+            return scores[player] + num_threes
+
+    def term_val(self, player):
+        assert self.game_over()
+        winners = self.get_winner()
+        if len(winners) != 1:
+            return 0
+        w = winners.pop()[0]
+        if w == player:
+            return 1
+        else:
+            return -1
