@@ -175,6 +175,21 @@ class Grid:
             scored = True
         return scored, line.get_pts(), filled
 
+    def test_line(self, line):
+        new_grid = self
+        #scored = False
+        assert not new_grid.game_over()
+        assert new_grid.is_valid(line)
+        key = line.get_pts()
+        current = new_grid.lines[key]
+        assert current.get_owner() == None
+        new_grid.lines[key] = line
+        #filled = new_grid.upd_boxes(line)
+        # if len(filled) > 0:
+        #scored = True
+        # return scored, line.get_pts(), filled
+        return new_grid
+
     def get_scores(self):
         scores = {None: 0}
         for p in self.players:
