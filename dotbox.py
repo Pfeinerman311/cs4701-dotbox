@@ -190,7 +190,7 @@ class Grid:
         winners = [k for k, v in scores.items() if v == scores[m]]
         return winners
 
-    def get_valid_moves(self, player):
+    def get_valid_moves(self):
         valid = [k for k, v in self.lines.items() if v.get_owner() == None]
 
     def val(self, player):
