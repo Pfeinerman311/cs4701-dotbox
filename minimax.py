@@ -12,22 +12,21 @@ def minimax(gameState,
             player):
 
     # Presetting depth to check
-    if (gameState.isOver()):
-        return gameState.termval(player)
+    if (gameState.is_over()):
+        return gameState.term_val(player)
 
     # Maximizer's Turn
     if (maxTurn):
-        level_value, gameState = value()
-        return max(minimax(checkDepth + 1, gameState,
-                           False,  Depth),
-                   minimax(curDepth + 1, gameState,
-                           False, Depth))
+        return max(minimax(gameState,
+                           False,  player),
+                   minimax(gameState,
+                           False, player))
     # Minimizer's Turn
     else:
-        return min(minimax(checkDepth + 1, gameState,
-                           True,  Depth),
-                   minimax(checkDepth + 1, gameState,
-                           True,  Depth))
+        return min(minimax(gameState,
+                           True,  player),
+                   minimax(gameState,
+                           True,  player))
 
 
 def getMove(player, game_state, stop_search):
