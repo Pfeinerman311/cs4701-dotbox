@@ -44,7 +44,7 @@ def minimax(gameState,
 
         print("is over:")
         print(gameState.is_over())
-        print(gameState.)
+        # print(gameState.)
 
         for m1, m2 in gameState.get_valid_moves():
             # print(m1)
