@@ -99,9 +99,6 @@ class Grid:
                 self.boxes[row*dim[1]+col] = Box(row*dim[1]+col)
 
     def game_over(self):
-        # rows, cols = self.dim[0], self.dim[1]
-        # max = 2*rows*cols - rows - cols
-        # return (len(self.lines) == max)
         owners = [l.get_owner() for l in self.lines.values()]
         return not (None in owners)
 
@@ -191,8 +188,11 @@ class Grid:
         return winners
 
     def get_valid_moves(self):
-        valid = [k for k, v in self.lines.items() if v.get_owner() == None]
-        return valid
+        if self.is_over():
+            return []
+        else:
+            valid = [k for k, v in self.lines.items() if v.get_owner() == None]
+            return valid
 
     def state_val(self, player):
         tot_boxes = len(self.boxes)
@@ -223,7 +223,6 @@ class Grid:
                     return tot_boxes
                 else:
                     return -tot_boxes
-        new_grid = self
         threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
         num_threes = len(threes)
         if scores[player] + num_threes > to_win:
@@ -255,12 +254,16 @@ class Grid:
             return -1
 
     def test_move(self, line):
-        assert not self.game_over()
+        assert not self.is_over()
         assert self.is_valid(line)
         key = line.get_pts()
         current = self.lines[key]
         assert current.get_owner() == None
-        new_grid = self
+        new_grid = Grid(self.dim, self.players)
+        for k, v in self.lines.items():
+            new_grid.lines[k] = v
+        for k, v in self.boxes.items():
+            new_grid.boxes[k] = v
         new_grid.lines[key] = line
         return new_grid
 
