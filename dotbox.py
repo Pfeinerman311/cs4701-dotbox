@@ -179,7 +179,7 @@ class Grid:
         scores = {None: 0}
         for p in self.players:
             scores[p] = 0
-        for box in self.boxes:
+        for box in self.boxes.values():
             scores[box.get_owner()] += 1
         del scores[None]
         return scores
