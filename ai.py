@@ -7,12 +7,15 @@ def minimax(gameState,
             maxTurn,
             player, players):
 
-    # Base Case
-    if (gameState.game_over()):
-        return gameState.term_val(players.get_players()[player])
+    print("----------------")
 
+    # Base Case
+    if (gameState.is_over()):
+        print("in case")
+        return gameState.term_val(players.get_players()[player])
+    print(gameState.is_over())
     # Maximizer's Turn
-    if (maxTurn):
+    elif (maxTurn):
         vals = [0]
         if player == 1:
             player = 0
@@ -37,8 +40,10 @@ def minimax(gameState,
             player = 1
 
         for m1, m2 in gameState.get_valid_moves():
-            # print(m1)
-            # print(m2)
+            print(m1)
+            print(m2)
+            print("is over")
+            print(gameState.is_over())
             # print(dotbox.Line((m1, m2), players.get_players()[player]))
 
             line = dotbox.Line((m1, m2), players.get_players()[player])

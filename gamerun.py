@@ -29,9 +29,9 @@ def player_move(players, game_state, gui, player):
         except ValueError:
             print("Invalid move - not provided two numbers with a comma inbetween")
         else:
-            print("user player test")
-            print(type(players))
-            print(type(player))
+            # print("user player test")
+            # print(type(players))
+            # print(type(player))
             line = dotbox.Line((p1, p2), players.get_players()[player])
             try:
                 attempt = game_state.draw_line(line)
@@ -63,14 +63,14 @@ def play_game(n):
         gui.is_user_turn = True
         gui.disp_board()
         gui.update_pygame()
-        print("playe game check")
+        # print("playe game check")
 
         if player == 1:
             player = 0
         else:
             player = 1
-        print("player")
-        print(str(player))
+        # print("player")
+        # print(str(player))
         player_move(players, game_state, gui, player)
 
         gui.disp_board()
