@@ -3,10 +3,6 @@ import math
 import dotbox
 
 
-def value(x):
-    return 0, "New State"
-
-
 def minimax(gameState,
             maxTurn,
             player, players):
@@ -19,7 +15,8 @@ def minimax(gameState,
     if (maxTurn):
         vals = []
         for move in gameState.get_valid_moves():
-            vals.append(minimax(gameState.test_move(move), False, NEXT PLAYER))
+            vals.append(minimax(gameState.test_move(
+                move), False, players-player))
         return max(vals)
 
     # Minimizer's Turn

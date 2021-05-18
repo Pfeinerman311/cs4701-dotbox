@@ -3,16 +3,22 @@ import dotbox
 import users
 import interface
 import pygame
+import minimax
 
 
 def player_move(players, game_state, gui, player):
     #0 is player and 1 is AI
 
     player = (player + 1) % 1
+    print("player is")
+    print(str(player))
     player_ob = players[player]
     # player = 0
     if (player == 1):
-        minimax(player_ob, game_state)
+        values = minimax(player_ob, game_state, players)
+        print("values are:")
+        print(values)
+
     else:
         try:
             p1, p2 = map(int, input(
