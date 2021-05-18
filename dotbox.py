@@ -232,6 +232,8 @@ class Grid:
             return scores[player] + num_threes
 
     def is_over(self):
+        if self.game_over():
+            return True
         tot_boxes = len(self.boxes)
         to_win = tot_boxes//2
         scores = self.get_scores()
