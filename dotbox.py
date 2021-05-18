@@ -263,3 +263,7 @@ class Grid:
         new_grid = self
         new_grid.lines[key] = line
         return new_grid
+
+    def print_lines(self):
+        for l in self.lines.values():
+            print(l + ", ")
