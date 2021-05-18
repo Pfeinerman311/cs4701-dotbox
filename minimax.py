@@ -9,7 +9,7 @@ def value(x):
 
 def minimax(gameState,
             maxTurn,
-            player):
+            player, players):
 
     # Presetting depth to check
     if (gameState.is_over()):
@@ -24,12 +24,12 @@ def minimax(gameState,
 
     # Minimizer's Turn
     else:
-        return min(minimax(gameState,
-                           True,  player),
-                   minimax(gameState,
-                           True,  player))
+        vals = []
+        for move in gameState.get_valid_moves():
+            vals.append(minimax(gameState.test_move(move), True, NEXT PLAYER))
+        return min(vals)
 
 
-def getMove(player, game_state, stop_search):
+def getMove(player, game_state, players):
 
-    minimax(game_state, True,  player)
+    minimax(game_state, True,  player, players)
