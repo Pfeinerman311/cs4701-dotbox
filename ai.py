@@ -13,14 +13,22 @@ def minimax(gameState,
 
     # Maximizer's Turn
     if (maxTurn):
-        vals = []
+        vals = [0]
         if player == 1:
             player = 0
         else:
             player = 1
-        for move in gameState.get_valid_moves():
+
+        print(gameState.get_valid_moves())
+
+        for m1, m2 in gameState.get_valid_moves():
+            # print(players.get_players()[player])
+            # print(m1)
+            # print(m2)
+            # print(dotbox.Line((m1, m2), players.get_players()[player]))
+            line = dotbox.Line((m1, m2), players.get_players()[player])
             vals.append(minimax(gameState.test_move(
-                move), False, player, players))
+                line), False, player, players))
         return max(vals)
 
     # Minimizer's Turn
@@ -30,9 +38,18 @@ def minimax(gameState,
             player = 0
         else:
             player = 1
-        for move in gameState.get_valid_moves():
+        # print("getting players")
+        # print(type(players))
+        # print(players.get_players()[player])
+
+        for m1, m2 in gameState.get_valid_moves():
+            print(m1)
+            print(m2)
+            print(dotbox.Line((m1, m2), players.get_players()[player]))
+
+            line = dotbox.Line((m1, m2), players.get_players()[player])
             vals.append(minimax(gameState.test_move(
-                move), True, player, players))
+                line), True, player, players))
         return min(vals)
 
 

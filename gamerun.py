@@ -15,6 +15,9 @@ def player_move(players, game_state, gui, player):
     # player_ob = players[player]
     # player = 0
     if (player == 1):
+        print(type(game_state))
+
+        print(type(game_state.get_valid_moves()))
         values = ai.getMove(player, game_state, players)
         print("values are:")
         print(values)
@@ -26,6 +29,9 @@ def player_move(players, game_state, gui, player):
         except ValueError:
             print("Invalid move - not provided two numbers with a comma inbetween")
         else:
+            print("user player test")
+            print(type(players))
+            print(type(player))
             line = dotbox.Line((p1, p2), players.get_players()[player])
             try:
                 attempt = game_state.draw_line(line)

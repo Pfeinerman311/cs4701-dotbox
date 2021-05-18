@@ -16,8 +16,10 @@ class Players:
         self.init_players(n)
 
     def init_players(self, n):
+        print("in users init")
         tmp = []
-        for i in n:
+        for i in range(int(n)):
+            print("player " + str(i))
             self.players.append(Player(i))
 
     def p_length(self):
