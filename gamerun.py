@@ -3,19 +3,19 @@ import dotbox
 import users
 import interface
 import pygame
-import minimax
+import ai
+import sys
 
 
 def player_move(players, game_state, gui, player):
     #0 is player and 1 is AI
 
-    player = (player + 1) % 1
-    print("player is")
-    print(str(player))
-    player_ob = players[player]
+    # print("player is")
+    # print(str(player))
+    # player_ob = players[player]
     # player = 0
     if (player == 1):
-        values = minimax(player_ob, game_state, players)
+        values = ai.getMove(player, game_state, players)
         print("values are:")
         print(values)
 
@@ -38,13 +38,11 @@ def player_move(players, game_state, gui, player):
 
                 if att:
                     print("You scored!.")
-                    # print("box in gamerun is "+str(type(box)))
                     gui.fill_box(box)
 
 
 def play_game(n):
     players = users.Players(n)
-    # init 9 - might change
     game_state = dotbox.Grid((4, 4), players.get_players())
     gui = interface.Ui(4, 4)
     gui.start()
@@ -59,8 +57,15 @@ def play_game(n):
         gui.is_user_turn = True
         gui.disp_board()
         gui.update_pygame()
+        print("playe game check")
+
+        if player == 1:
+            player = 0
+        else:
+            player = 1
+        print("player")
+        print(str(player))
         player_move(players, game_state, gui, player)
-        # wait(6)
 
         gui.disp_board()
         gui.update_pygame()
