@@ -192,6 +192,7 @@ class Grid:
 
     def get_valid_moves(self):
         valid = [k for k, v in self.lines.items() if v.get_owner() == None]
+        return valid
 
     def state_val(self, player):
         tot_boxes = len(self.boxes)
