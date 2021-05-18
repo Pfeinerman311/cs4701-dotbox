@@ -49,8 +49,8 @@ def player_move(players, game_state, gui, player):
 
 def play_game(n):
     players = users.Players(n)
-    game_state = dotbox.Grid((4, 4), players.get_players())
-    gui = interface.Ui(4, 4)
+    game_state = dotbox.Grid((2, 2), players.get_players())
+    gui = interface.Ui(2, 2)
     gui.start()
     player = 1
     tmp = 1
