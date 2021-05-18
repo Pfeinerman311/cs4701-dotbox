@@ -13,7 +13,7 @@ def minimax(gameState,
     if (gameState.is_over()):
         print("in case")
         return gameState.term_val(players.get_players()[player])
-    print(gameState.is_over())
+    # print(gameState.is_over())
     # Maximizer's Turn
     elif (maxTurn):
         vals = [0]
