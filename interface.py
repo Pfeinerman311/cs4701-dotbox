@@ -13,7 +13,7 @@ class Ui:
         self.Grid = Grid
         self.Boardsize = Boardsize
 
-        self.BOARDSIZE = 4
+        self.BOARDSIZE = Boardsize
         self.BLACK = (0, 0, 0)
         self.RED = (255, 0, 0)
         self.BLUE = (0, 0, 255)
@@ -130,27 +130,16 @@ class Ui:
         self.disp_board()
         pygame.display.update()
 
-    def fill_box(self, boxe):
-        # print("in fill box")
-        # print("boxe is")
-        # print(str(boxe))
-        print("boxes is")
-        print(self.boxes)
+    def fill_box(self, boxe, player):
 
-        # print("box2 is "+str(list(boxe)))
         for i, box in enumerate(self.boxes[int(list(boxe)[0]):int(list(boxe)[0])+1]):
-            print("param is")
-
-            print(int(list(boxe)[0]))
-            print("in for loop")
-
-            self.score[0] += 1
+            if player == 1:
+                self.score[1] += 1
+            else:
+                self.score[0] += 1
             tmp = int(list(boxe)[0])//4
 
-            self.boxes[i+int(list(boxe)[0])-tmp][4] = self.OWNER_USER
-            print("adding box for")
-            print(self.boxes[i])
-
+            self.boxes[i+int(list(boxe)[0])-tmp][4] = player+1
             self.is_box = True
 
     def rerun(self):

@@ -40,4 +40,4 @@ class Players:
         self.current_player = self.players[0]
 
     def set_ai_player(self):
-        self.current_player = self.player[1]
+        self.current_player = self.players[1]
