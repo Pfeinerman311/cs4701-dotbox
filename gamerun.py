@@ -11,12 +11,13 @@ def player_move(players, game_state, gui):
     print("Current player is:")
     print(players.get_current_player().get_id())
     if (players.get_current_player().get_id() == 1):
-        print("in ai move")
+        # print("in ai move")
         move = ai.getMove(game_state, players)[3]
         try:
-            print("move is:")
-            print(move)
-            attempt = game_state.draw_line(move)
+            # print("move is:")
+            # print(move)
+            line = dotbox.Line(move, players.get_current_player())
+            attempt = game_state.draw_line(line)
             att = attempt[0]
             box = attempt[2].keys()
         except AssertionError:
@@ -26,7 +27,7 @@ def player_move(players, game_state, gui):
             if att:
                 print("The AI scored!")
                 gui.fill_box(box)
-        players.switch_player()
+        players.set_user_player()
 
     else:
         try:
@@ -53,8 +54,8 @@ def player_move(players, game_state, gui):
 
 def play_game(n):
     players = users.Players(n)
-    game_state = dotbox.Grid((2, 2), players.get_players())
-    gui = interface.Ui(2, 2)
+    game_state = dotbox.Grid((3, 3), players.get_players())
+    gui = interface.Ui(3, 3)
     gui.start()
     while True:
         for event in pygame.event.get():
