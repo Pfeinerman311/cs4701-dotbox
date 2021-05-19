@@ -265,7 +265,9 @@ class Grid:
         for k, v in self.boxes.items():
             new_grid.boxes[k] = v
         new_grid.lines[key] = line
-        return new_grid
+        filled = self.upd_boxes(line)
+        scored = len(filled) > 0
+        return scored, new_grid
 
     def print_lines(self):
         for l in self.lines.values():
