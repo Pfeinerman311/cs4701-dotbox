@@ -14,12 +14,11 @@ class Players:
     def __init__(self, n):
         self.players = []
         self.init_players(n)
+        self.current_player = self.players[0]
 
     def init_players(self, n):
-        print("in users init")
-        tmp = []
+
         for i in range(int(n)):
-            print("player " + str(i))
             self.players.append(Player(i))
 
     def p_length(self):
@@ -27,3 +26,12 @@ class Players:
 
     def get_players(self):
         return self.players
+
+    def get_current_player(self):
+        return self.current_player
+
+    def switch_player(self):
+        if self.current_player == self.players[0]:
+            self.current_player = self.players[1]
+        else:
+            self.current_player = self.players[0]

@@ -7,20 +7,21 @@ import ai
 import sys
 
 
-def player_move(players, game_state, gui, player):
-    #0 is player and 1 is AI
-
-    # print("player is")
-    # print(str(player))
-    # player_ob = players[player]
-    # player = 0
-    if (player == 1):
-        print(type(game_state))
-
-        print(type(game_state.get_valid_moves()))
-        values = ai.getMove(player, game_state, players)
-        print("values are:")
-        print(values)
+def player_move(players, game_state, gui):
+    if (players.get_current_player() == 1):
+        move = ai.getMove(game_state, players)[4]
+        try:
+            attempt = game_state.draw_line(move)
+            att = attempt[0]
+            box = attempt[2].keys()
+        except AssertionError:
+            print("Invalid move - Assertion Error")
+        else:
+            gui.move(True, move[0], move[1])
+            if att:
+                print("The AI scored!")
+                gui.fill_box(box)
+        players.switch_player()
 
     else:
         try:
@@ -29,10 +30,9 @@ def player_move(players, game_state, gui, player):
         except ValueError:
             print("Invalid move - not provided two numbers with a comma inbetween")
         else:
-            # print("user player test")
-            # print(type(players))
-            # print(type(player))
-            line = dotbox.Line((p1, p2), players.get_players()[player])
+
+            line = dotbox.Line((p1, p2), players.get_players()[
+                               players.get_current_player()])
             try:
                 attempt = game_state.draw_line(line)
                 att = attempt[0]
@@ -41,10 +41,10 @@ def player_move(players, game_state, gui, player):
                 print("Invalid move - Assertion Error")
             else:
                 gui.move(True, p1, p2)
-
                 if att:
-                    print("You scored!.")
+                    print("You scored!")
                     gui.fill_box(box)
+        players.switch_player()
 
 
 def play_game(n):
@@ -52,8 +52,6 @@ def play_game(n):
     game_state = dotbox.Grid((2, 2), players.get_players())
     gui = interface.Ui(2, 2)
     gui.start()
-    player = 1
-    tmp = 1
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -63,16 +61,7 @@ def play_game(n):
         gui.is_user_turn = True
         gui.disp_board()
         gui.update_pygame()
-        # print("playe game check")
-
-        if player == 1:
-            player = 0
-        else:
-            player = 1
-        # print("player")
-        # print(str(player))
-        player_move(players, game_state, gui, player)
-
+        player_move(players, game_state, gui)
         gui.disp_board()
         gui.update_pygame()
 
@@ -82,7 +71,6 @@ def main():
     print("Welcome to Dots and Boxes.")
     print("How many players are playing?")
     n = input()
-
     play_game(n)
 
 
