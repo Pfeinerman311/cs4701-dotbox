@@ -41,29 +41,28 @@ def maximize(gameState, players, alpha, beta):
     best_move = None
 
     if (gameState.is_over()):
-        return gameState.term_val(players.get_players()[players.get_current_player])
+        v = gameState.term_val(players.get_current_player())
+        return (0, 0,  v, 0)
 
-    else:
-        for m in gameState.get_valid_moves():
-            line = dotbox.Line(m, players.get_players()[
-                               players.get_current_player])
-            ngameState = gameState.test_move(line)
+    for m in gameState.get_valid_moves():
+        line = dotbox.Line(m, players.get_current_player())
+        ngameState = gameState.test_move(line)
 
-            (x, y, z, v, min_move) = minimize(
-                ngameState,  players, alpha, beta)
+        (x, y, v, min_move) = minimize(
+            ngameState, players, alpha, beta)
 
-            if v > max_value:
-                max_value = v
-                best_move = m
+        if v > max_value:
+            max_value = v
+            best_move = m
 
-            if max_value >= beta:
-                players.switch_player()
-                return (ngameState,  players, max_value, best_move)
-
-            if max_value > alpha:
-                alpha = max_value
+        if max_value >= beta:
             players.switch_player()
-            return (ngameState, players, max_value, best_move)
+            return (ngameState,  players, max_value, best_move)
+
+        if max_value > alpha:
+            alpha = max_value
+        players.switch_player()
+        return (ngameState, players, max_value, best_move)
 
 
 #  def min_alpha_beta(self, alpha, beta):
@@ -105,16 +104,18 @@ def minimize(gameState,
              players, alpha, beta):
     min_value = 2
     best_move = None
+    if (gameState.is_over()):
+        v = gameState.term_val(players.get_current_player())
+        return (0, 0,  v, 0)
 
     for m in gameState.get_valid_moves():
 
-        line = dotbox.Line(m, players.get_players()[
-                           players.get_current_player()])
+        line = dotbox.Line(m, players.get_current_player())
         ngameState = gameState.test_move(
             line)
-        (x, x, x, v, max_move) = maximize(
+        (x, x,  v, max_move) = maximize(
             ngameState,  players, alpha, beta)
-        if m < min_value:
+        if v < min_value:
             min_value = v
             best_move = m
 

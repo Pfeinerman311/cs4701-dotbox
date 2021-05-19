@@ -8,9 +8,14 @@ import sys
 
 
 def player_move(players, game_state, gui):
-    if (players.get_current_player() == 1):
-        move = ai.getMove(game_state, players)[4]
+    print("Current player is:")
+    print(players.get_current_player().get_id())
+    if (players.get_current_player().get_id() == 1):
+        print("in ai move")
+        move = ai.getMove(game_state, players)[3]
         try:
+            print("move is:")
+            print(move)
             attempt = game_state.draw_line(move)
             att = attempt[0]
             box = attempt[2].keys()
@@ -31,8 +36,7 @@ def player_move(players, game_state, gui):
             print("Invalid move - not provided two numbers with a comma inbetween")
         else:
 
-            line = dotbox.Line((p1, p2), players.get_players()[
-                               players.get_current_player()])
+            line = dotbox.Line((p1, p2), players.get_current_player())
             try:
                 attempt = game_state.draw_line(line)
                 att = attempt[0]
