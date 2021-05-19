@@ -27,7 +27,8 @@ def player_move(players, game_state, gui):
             if att:
                 print(players.get_current_player().get_id())
                 gui.fill_box(box, players.get_current_player().get_id())
-        players.set_user_player()
+            else:
+                players.set_user_player()
 
     else:
         try:
@@ -49,7 +50,8 @@ def player_move(players, game_state, gui):
                 if att:
                     print("You scored!")
                     gui.fill_box(box, players.get_current_player().get_id())
-        players.switch_player()
+                else:
+                    players.switch_player()
 
 
 def play_game(n, size):
