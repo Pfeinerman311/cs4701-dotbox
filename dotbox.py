@@ -247,7 +247,7 @@ class Grid:
         winners = self.get_winner()
         if len(winners) != 1:
             return 0
-        w = winners.pop()[0]
+        w = winners.pop()
         if w == player:
             return 1
         else:
