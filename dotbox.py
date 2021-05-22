@@ -30,6 +30,9 @@ class Line:
         else:
             return 1
 
+    def copy_line(self):
+        return Line(self.pts, self.owner)
+
 
 class Box:
     def __init__(self, index, owner=None):
@@ -78,6 +81,9 @@ class Box:
             return True
         else:
             return False
+
+    def copy_box(self):
+        return Box(self.index, self.owner)
 
 
 class Grid:
@@ -195,7 +201,7 @@ class Grid:
             return valid
 
     def state_val(self, player):
-        tot_boxes = len(self.boxes)
+        tot_boxes = self.total_boxes()
         to_win = tot_boxes//2
         scores = self.get_scores()
         for w in self.get_winner():
@@ -206,10 +212,13 @@ class Grid:
                     return -tot_boxes
         threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
         num_threes = len(threes)
-        if scores[player] + num_threes > to_win:
-            return tot_boxes
-        else:
-            return scores[player] + num_threes
+        opp = [v for k, v in scores.items() if k != player and k != None]
+        # if scores[player] + num_threes > to_win:
+        # if opp[0] + num_threes > to_win:
+        #     return -tot_boxes
+        # else:
+        #     return scores[player] - num_threes - opp[0]
+        return scores[player] - opp[0]
 
     def val(self, move):
         assert self.is_valid(move)
@@ -254,21 +263,28 @@ class Grid:
             return -1
 
     def test_move(self, line):
-        assert not self.is_over()
+        assert not self.game_over()
         assert self.is_valid(line)
         key = line.get_pts()
         current = self.lines[key]
         assert current.get_owner() == None
-        new_grid = Grid(self.dim, self.players)
-        for k, v in self.lines.items():
-            new_grid.lines[k] = v
-        for k, v in self.boxes.items():
-            new_grid.boxes[k] = v
+        new_grid = self.copy_grid()
         new_grid.lines[key] = line
-        filled = self.upd_boxes(line)
+        filled = new_grid.upd_boxes(line)
         scored = len(filled) > 0
         return scored, new_grid
 
     def print_lines(self):
         for l in self.lines.values():
-            print(l + ", ")
+            print(str(l) + ", ")
+
+    def total_boxes(self):
+        return len(self.boxes)
+
+    def copy_grid(self):
+        new_grid = Grid(self.dim, self.players)
+        for k, v in self.lines.items():
+            new_grid.lines[k] = v.copy_line()
+        for k, v in self.boxes.items():
+            new_grid.boxes[k] = v.copy_box()
+        return new_grid
