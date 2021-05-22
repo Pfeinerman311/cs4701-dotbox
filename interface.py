@@ -122,9 +122,9 @@ class Ui:
 
     def move(self, is_user, id1, id2):
         self.is_user_turn = is_user
-        print("entered move")
-        print("move is:")
-        print(str(id1) + " to "+str(id2))
+        # print("entered move")
+        # print("move is:")
+        # print(str(id1) + " to "+str(id2))
         self.board[self.id_to_index(id1)].partners.append(id2)
         self.board[self.id_to_index(id2)].partners.append(id1)
         self.moves_done.append((id1, id2))
