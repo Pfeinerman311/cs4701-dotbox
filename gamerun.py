@@ -23,7 +23,7 @@ def player_move(players, game_state, gui):
         except AssertionError:
             print("Invalid move - Assertion Error")
         else:
-            gui.move(True, move[0], move[1])
+            gui.move(False, move[0], move[1])
             if att:
                 print(players.get_current_player().get_id())
                 gui.fill_box(box, players.get_current_player().get_id())

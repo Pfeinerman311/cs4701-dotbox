@@ -104,6 +104,7 @@ class Ui:
                              point.y, 5, self.BLACK)
             dot_num = self.dot_font.render(str(i), True, self.BLACK)
             self.SURF.blit(dot_num, (point.x + 10, point.y - 20))
+
         for box in self.boxes:
 
             x1 = self.board[self.id_to_index(box[0])].x
@@ -120,6 +121,10 @@ class Ui:
                                                    2, y1 + 50 - text_height / 2))
 
     def move(self, is_user, id1, id2):
+        self.is_user_turn = is_user
+        print("entered move")
+        print("move is:")
+        print(str(id1) + " to "+str(id2))
         self.board[self.id_to_index(id1)].partners.append(id2)
         self.board[self.id_to_index(id2)].partners.append(id1)
         self.moves_done.append((id1, id2))
@@ -131,15 +136,29 @@ class Ui:
         pygame.display.update()
 
     def fill_box(self, boxe, player):
+        index = int(list(boxe)[0])
+        tmp = index//self.BOARDSIZE
+        n_index = index-tmp
+        # print("entered fill box")
+        # print("boxes is")
+        # print(str(self.boxes))
+        # print(str(self.boxes[int(list(boxe)[0]):int(list(boxe)[0])+1]))
 
-        for i, box in enumerate(self.boxes[int(list(boxe)[0]):int(list(boxe)[0])+1]):
+        # print("boxe is:")
+        # print(boxe)
+
+        for i, box in enumerate(self.boxes[n_index:n_index+1]):
             if player == 1:
                 self.score[1] += 1
             else:
                 self.score[0] += 1
-            tmp = int(list(boxe)[0])//4
+            # print("i is:")
+            # print(i)
 
-            self.boxes[i+int(list(boxe)[0])-tmp][4] = player+1
+            # print("tmp is")
+            # print(tmp)
+
+            self.boxes[i+n_index][self.BOARDSIZE] = player+1
             self.is_box = True
 
     def rerun(self):
