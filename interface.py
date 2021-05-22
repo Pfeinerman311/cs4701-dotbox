@@ -48,13 +48,16 @@ class Ui:
                 self.board.append(
                     self.Point(self.BOARDSIZE * i + i2, i2 * 100 + 100, i * 100 + 100, []))
         self.moves_done = []
+        # self.boxes = [0 for i in range(self.BOARDSIZE-1)
+        #               for i in range(self.BOARDSIZE-1)]
+        self.boxes = []
+        # self.boxes = [[0]*self.BOARDSIZE for i in range(self.BOARDSIZE-1)] for i in range(self.BOARDSIZE-1)
         self.moves_done_persons = []
-        self.boxes = [[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, self.OWNER_NONE]
-                      for i in range(0, 3)]
-        self.boxes.extend([[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, self.OWNER_NONE]
-                           for i in range(4, 7)])
-        self.boxes.extend([[i, i+1, i+self.BOARDSIZE, i+self.BOARDSIZE+1, self.OWNER_NONE]
-                           for i in range(8, 11)])
+
+        for row in range(self.BOARDSIZE-1):
+            for col in range(self.BOARDSIZE-1):
+                self.boxes.append([row*self.BOARDSIZE + col, self.OWNER_NONE])
+
         self.score = [0, 0]
         self.is_user_turn = True
 
@@ -111,11 +114,11 @@ class Ui:
 
             y1 = self.board[self.id_to_index(box[0])].y
 
-            if box[4] == self.OWNER_USER:
+            if box[1] == self.OWNER_USER:
                 text_width, text_height = self.font.size("U")
                 self.SURF.blit(self.BOX_USER, (x1 + 50 - text_width /
                                                2, y1 + 50 - text_height / 2))
-            elif box[4] == self.OWNER_COMPUTER:
+            elif box[1] == self.OWNER_COMPUTER:
                 text_width, text_height = self.font.size("C")
                 self.SURF.blit(self.BOX_COMPUTER, (x1 + 50 - text_width /
                                                    2, y1 + 50 - text_height / 2))
@@ -139,26 +142,14 @@ class Ui:
         index = int(list(boxe)[0])
         tmp = index//self.BOARDSIZE
         n_index = index-tmp
-        # print("entered fill box")
-        # print("boxes is")
-        # print(str(self.boxes))
-        # print(str(self.boxes[int(list(boxe)[0]):int(list(boxe)[0])+1]))
-
-        # print("boxe is:")
-        # print(boxe)
 
         for i, box in enumerate(self.boxes[n_index:n_index+1]):
             if player == 1:
                 self.score[1] += 1
             else:
                 self.score[0] += 1
-            # print("i is:")
-            # print(i)
 
-            # print("tmp is")
-            # print(tmp)
-
-            self.boxes[i+n_index][self.BOARDSIZE] = player+1
+            self.boxes[i+n_index][1] = player+1
             self.is_box = True
 
     def rerun(self):
