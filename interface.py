@@ -126,10 +126,11 @@ class Ui:
                     text_width, text_height = self.font.size("C2")
                     self.w.blit(self.boxc, (x1 + 50 - text_width /
                                             2, y1 + 50 - text_height / 2))
+                else:
 
-                text_width, text_height = self.font.size("C")
-                self.w.blit(self.boxc, (x1 + 50 - text_width /
-                                        2, y1 + 50 - text_height / 2))
+                    text_width, text_height = self.font.size("C")
+                    self.w.blit(self.boxc, (x1 + 50 - text_width /
+                                            2, y1 + 50 - text_height / 2))
 
     def move(self, is_user, id1, id2):
         self.is_user_turn = is_user

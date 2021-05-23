@@ -106,15 +106,18 @@ def play_game(n, size, ai_game):
         player_move(players, game_state, gui, ai_game)
         if game_state.game_over():
             print("The game is over.")
-            print("Player "+str(game_state.get_winner()
-                                [0].get_id())+" won the game.")
+            if len(game_state.get_winner()) > 1:
+                print("There was a tie!")
+            else:
+                print("Player "+str(game_state.get_winner()
+                                    [0].get_id())+" won the game.")
             gui.disp_board()
             gui.update_pygame()
             time.sleep(1)
             break
         gui.disp_board()
         gui.update_pygame()
-        # time.sleep(1)
+        time.sleep(1)
 
     gui.disp_board()
 
