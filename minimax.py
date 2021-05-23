@@ -11,7 +11,15 @@ def maximize(game_state, players, alpha, beta, move):
     best_move = None
     state = None
 
-    for m in game_state.get_valid_moves():
+    moves = game_state.get_valid_moves()
+
+    if (len(moves) > 12):
+        coords = moves[np.random.choice(len(moves))]
+        line = dotbox.Line(coords, players.get_current_player())
+        scored, new_state = game_state.test_move(line)
+        return (game_state, players, 0, coords)
+
+    for m in moves:
         line = dotbox.Line(m, players.get_current_player())
         scored, new_state = game_state.test_move(line)
 

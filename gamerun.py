@@ -8,12 +8,13 @@ import sys
 import greedy
 import time
 import val_ai
+import minimax
 
 
 def player_move(players, game_state, gui, ai_game):
 
     if (players.get_current_player().get_id() == 1):
-        move = val_ai.getMove(game_state, players)[3]
+        move = minimax.getMove(game_state, players)[3]
         try:
             players.set_ai_player()
 
