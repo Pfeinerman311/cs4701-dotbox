@@ -1,14 +1,21 @@
 import dotbox
+import numpy as np
 
 
 def box_move(gameState, players):
-    for i in gameState.get_valid_moves():
-        line = dotbox.Line(i, players.get_current_player())
+    moves = gameState.get_valid_moves()
+    best_move = None
+    s = False
+    for m in moves:
+        line = dotbox.Line(m, players.get_current_player())
         scored, new_game_state = gameState.test_move(line)
-        if scored:
-            return i
-
-    return gameState.get_valid_moves()[0]
+        if scored or s:
+            if np.random.choice([True, False]):
+                best_move = m
+    if best_move != None:
+        return best_move
+    else:
+        return moves[np.random.choice(len(moves))]
 
 
 def getGreedyMove(game_state, players):
