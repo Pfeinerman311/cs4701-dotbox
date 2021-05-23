@@ -3,16 +3,17 @@ import dotbox
 import users
 import interface
 import pygame
-import ai
+# import ai
 import sys
 import greedy
 import time
+import val_ai
 
 
 def player_move(players, game_state, gui, ai_game):
 
     if (players.get_current_player().get_id() == 1):
-        move = ai.getMove(game_state, players)[3]
+        move = val_ai.getMove(game_state, players)[3]
         try:
             players.set_ai_player()
 
@@ -109,6 +110,7 @@ def play_game(n, size, ai_game):
                                 [0].get_id())+" won the game.")
             gui.disp_board()
             gui.update_pygame()
+            time.sleep(1)
             break
         gui.disp_board()
         gui.update_pygame()
