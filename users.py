@@ -41,3 +41,9 @@ class Players:
 
     def set_ai_player(self):
         self.current_player = self.players[1]
+
+    def get_other_player(self):
+        if self.current_player == self.players[0]:
+            return self.players[1]
+        else:
+            return self.players[0]

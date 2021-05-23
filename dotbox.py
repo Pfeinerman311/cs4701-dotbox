@@ -26,8 +26,10 @@ class Line:
 
     def get_dir(self):
         if self.pts[1] - self.pts[0] == 1:
+            # Horizontal Line
             return 0
         else:
+            # Vertical Line
             return 1
 
     def copy_line(self):
@@ -37,7 +39,7 @@ class Line:
 class Box:
     def __init__(self, index, owner=None):
         self.index = index
-        self.owner = None
+        self.owner = owner
         self.lines = []
 
     def get_index(self):
@@ -135,23 +137,34 @@ class Grid:
         for e in edges:
             if self.lines[e].get_owner() != None:
                 lines += 1
-        if self.boxes[index].get_owner() != None:
-            lines = -1
+        # if self.boxes[index].get_owner() != None:
+        #     lines = -1
         return lines
 
     def upd_boxes(self, line):
         p1 = line.get_pts()[0]
         player = line.get_owner()
         filled = {}
+        # self.print_boxes()
         if (p1 % self.dim[1] < self.dim[1]-1) and (p1 / self.dim[0] < self.dim[0]-1):
+            # print("FIRST")
+            # print(p1)
             if self.check_box(p1) == 4:
-                filled[p1] = self.boxes[p1].own(player)
+                self.boxes[p1].own(player)
+                filled[p1] = self.boxes[p1]
         if (line.get_dir() == 0) and (p1/self.dim[1] >= 1):
+            # print("SECOND")
+            # print(p1-self.dim[1])
             if self.check_box(p1-self.dim[1]) == 4:
-                filled[p1-self.dim[1]] = self.boxes[p1-self.dim[1]].own(player)
-        elif (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
+                self.boxes[p1 - self.dim[1]].own(player)
+                filled[p1-self.dim[1]] = self.boxes[p1-self.dim[1]]
+        if (line.get_dir() == 1) and (p1 % self.dim[1] > 0):
+            # print("THIRD")
+            # print(p1-1)
             if self.check_box(p1-1) == 4:
-                filled[p1-1] = self.boxes[p1-1].own(player)
+                self.boxes[p1-1].own(player)
+                filled[p1-1] = self.boxes[p1-1]
+        # self.print_boxes()
         return filled
 
     def is_valid(self, line):
@@ -176,15 +189,30 @@ class Grid:
         filled = self.upd_boxes(line)
         if len(filled) > 0:
             scored = True
+        # print("FILLED")
+        # print(filled)
+        # print("SCORE")
+        # print(self.get_scores())
         return scored, line.get_pts(), filled
 
     def get_scores(self):
-        scores = {None: 0}
+        # scores = {None: 0}
+        # for p in self.players:
+        #     scores[p] = 0
+        # for box in self.boxes.values():
+        #     scores[box.get_owner()] += 1
+        # del scores[None]
+        # return scores
+        # self.print_boxes()
+        scores = {}
+        # print(self.players)
         for p in self.players:
             scores[p] = 0
         for box in self.boxes.values():
-            scores[box.get_owner()] += 1
-        del scores[None]
+            if box.get_owner() != None:
+                scores[box.get_owner()] = scores[box.get_owner()] + 1
+        #del scores[None]
+        # print(scores)
         return scores
 
     def get_winner(self):
@@ -202,10 +230,16 @@ class Grid:
 
     def state_val(self, player):
         tot_boxes = self.total_boxes()
+        # print(tot_boxes)
         to_win = tot_boxes//2
+        # print(to_win)
         scores = self.get_scores()
+        # print(scores)
         for w in self.get_winner():
+            # print(w)
             if scores[w] > to_win:
+                # print(scores[w])
+                #print(w == player)
                 if w == player:
                     return tot_boxes
                 else:
@@ -213,7 +247,7 @@ class Grid:
         threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
         num_threes = len(threes)
         opp = [v for k, v in scores.items() if k != player and k != None]
-        # if scores[player] + num_threes > to_win:
+        # # if scores[player] + num_threes > to_win:
         # if opp[0] + num_threes > to_win:
         #     return -tot_boxes
         # else:
@@ -224,10 +258,10 @@ class Grid:
         assert self.is_valid(move)
         player = move.get_owner()
         tot_boxes = len(self.boxes)
-        to_win = tot_boxes//2
+        to_win = tot_boxes/2
         scores = self.get_scores()
         for w in self.get_winner():
-            if scores[w] > to_win:
+            if scores[w] >= to_win:
                 if w == player:
                     return tot_boxes
                 else:
@@ -288,3 +322,7 @@ class Grid:
         for k, v in self.boxes.items():
             new_grid.boxes[k] = v.copy_box()
         return new_grid
+
+    def print_boxes(self):
+        for k in self.boxes.keys():
+            print(str(k) + ": " + str(self.boxes[k].get_owner()))

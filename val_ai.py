@@ -3,9 +3,9 @@ import numpy as np
 
 
 def maximize(game_state, players, alpha, beta, move):
-    if (game_state.is_over()):
+    if (game_state.game_over()):
         v = game_state.state_val(players.get_current_player())
-        print("MAX")
+        print("MAX END")
         print(move)
         print(v)
         return (game_state, players,  v, move)
@@ -17,18 +17,20 @@ def maximize(game_state, players, alpha, beta, move):
     for m in game_state.get_valid_moves():
         line = dotbox.Line(m, players.get_current_player())
         scored, new_state = game_state.test_move(line)
+        # print("MAX")
+        # print(m)
+        # print(scored)
 
         if scored:
-            (x, y, v, min_move) = maximize(
+            (x, y, v, max_move) = maximize(
                 new_state, players, alpha, beta, m)
-
             # if v > max_value:
             #     max_value = v
             #     best_move = m
             #     state = new_state
 
         else:
-            players.switch_player()
+            # players.switch_player()
             (x, y, v, min_move) = minimize(
                 new_state, players, alpha, beta, m)
 
@@ -58,13 +60,13 @@ def maximize(game_state, players, alpha, beta, move):
             break
 
         # players.switch_player()
-    return (state, players, max_value, best_move)
+    return (game_state, players, max_value, best_move)
 
 
 def minimize(game_state, players, alpha, beta, move):
-    if (game_state.is_over()):
+    if (game_state.game_over()):
         v = game_state.state_val(players.get_current_player())
-        print("MIN")
+        print("MIN END")
         print(move)
         print(v)
         return (game_state, players,  v, move)
@@ -75,8 +77,11 @@ def minimize(game_state, players, alpha, beta, move):
 
     for m in game_state.get_valid_moves():
 
-        line = dotbox.Line(m, players.get_current_player())
+        line = dotbox.Line(m, players.get_other_player())
         scored, new_state = game_state.test_move(line)
+        # print("MIN")
+        # print(m)
+        # print(scored)
 
         if scored:
             (x, x,  v, max_move) = minimize(
@@ -88,7 +93,7 @@ def minimize(game_state, players, alpha, beta, move):
             #     state = new_state
 
         else:
-            players.switch_player()
+            # players.switch_player()
             (x, x,  v, max_move) = maximize(
                 new_state,  players, alpha, beta, m)
 
@@ -106,10 +111,10 @@ def minimize(game_state, players, alpha, beta, move):
             break
 
         # players.switch_player()
-    return (state, players, min_value, best_move)
+    return (game_state, players, min_value, best_move)
 
 
 def getMove(game_state, players):
     boxes = game_state.total_boxes()
     print(game_state.get_valid_moves())
-    return maximize(game_state, players, -(boxes+1), boxes + 1, game_state.get_valid_moves().pop())
+    return maximize(game_state, players, -(boxes+1), boxes + 1, game_state.get_valid_moves()[0])
