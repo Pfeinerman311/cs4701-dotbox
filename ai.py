@@ -62,13 +62,11 @@ def minimize(gameState,
             best_move = m
 
         if min_value <= alpha:
-            # players.switch_player()
             return (ngameState,  players, min_value, best_move)
 
         if min_value < beta:
             beta = min_value
 
-        # players.switch_player()
         return (ngameState, players, min_value, best_move)
 
 
