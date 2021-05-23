@@ -26,14 +26,20 @@ def player_move(players, game_state, gui, ai_game):
             print("Invalid move - Assertion Error")
         else:
             gui.move(False, move[0], move[1])
+            gui.disp_board()
+            gui.update_pygame()
             if att:
                 print(players.get_current_player().get_id())
                 gui.fill_box(box, players.get_current_player().get_id())
+                gui.disp_board()
+                gui.update_pygame()
             else:
                 players.set_user_player()
 
     elif (ai_game):
         move = greedy.getGreedyMove(game_state, players)
+        gui.disp_board()
+        gui.update_pygame()
         try:
             line = dotbox.Line(move, players.get_current_player())
             attempt = game_state.draw_line(line)
@@ -47,6 +53,8 @@ def player_move(players, game_state, gui, ai_game):
             gui.move(True, move[0], move[1])
             if att:
                 gui.fill_box(box, players.get_current_player().get_id())
+                gui.disp_board()
+                gui.update_pygame()
             else:
                 players.switch_player()
 
@@ -68,9 +76,13 @@ def player_move(players, game_state, gui, ai_game):
                 print("Invalid move - Assertion Error")
             else:
                 gui.move(True, p1, p2)
+                gui.disp_board()
+                gui.update_pygame()
                 if att:
                     print("You scored!")
                     gui.fill_box(box, players.get_current_player().get_id())
+                    gui.disp_board()
+                    gui.update_pygame()
                 else:
                     players.switch_player()
 
@@ -95,13 +107,16 @@ def play_game(n, size, ai_game):
             print("The game is over.")
             print("Player "+str(game_state.get_winner()
                                 [0].get_id())+" won the game.")
+            gui.disp_board()
+            gui.update_pygame()
             break
         gui.disp_board()
         gui.update_pygame()
 
     gui.disp_board()
-    time.sleep(10)
+
     gui.update_pygame()
+    # time.sleep(5)
 
 
 # Start of game:
