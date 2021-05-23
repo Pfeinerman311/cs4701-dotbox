@@ -112,4 +112,4 @@ def minimize(game_state, players, alpha, beta, move):
 def getMove(game_state, players):
     boxes = game_state.total_boxes()
     print(game_state.get_valid_moves())
-    return maximize(game_state, players, -(boxes+1), boxes + 1, game_state.get_valid_moves().pop())
+    return maximize(game_state, players, -(boxes+1), boxes + 1, game_state.get_valid_moves()[0])
