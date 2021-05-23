@@ -90,7 +90,7 @@ def player_move(players, game_state, gui, ai_game):
 def play_game(n, size, ai_game):
     players = users.Players(n)
     game_state = dotbox.Grid((size, size), players.get_players())
-    gui = interface.Ui(size, size)
+    gui = interface.Ui(size, size, ai_game)
     gui.start()
 
     while True:
@@ -112,6 +112,7 @@ def play_game(n, size, ai_game):
             break
         gui.disp_board()
         gui.update_pygame()
+        # time.sleep(1)
 
     gui.disp_board()
 
