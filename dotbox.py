@@ -194,11 +194,11 @@ class Grid:
         return winners
 
     def get_valid_moves(self):
-        if self.is_over():
-            return []
-        else:
-            valid = [k for k, v in self.lines.items() if v.get_owner() == None]
-            return valid
+        # if self.is_over():
+        #     return []
+        # else:
+        valid = [k for k, v in self.lines.items() if v.get_owner() == None]
+        return valid
 
     def state_val(self, player):
         tot_boxes = self.total_boxes()

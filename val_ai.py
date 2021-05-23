@@ -19,30 +19,30 @@ def maximize(game_state, players, alpha, beta, move):
 
         if scored:
             (x, y, v, min_move) = maximize(
-                new_state, players, alpha, beta, None)
+                new_state, players, alpha, beta, m)
 
-            if v > max_value:
-                max_value = v
-                best_move = m
-                state = new_state
+            # if v > max_value:
+            #     max_value = v
+            #     best_move = m
+            #     state = new_state
 
         else:
             players.switch_player()
             (x, y, v, min_move) = minimize(
-                new_state, players, alpha, beta, None)
+                new_state, players, alpha, beta, m)
 
-            if v > max_value:
-                max_value = v
-                best_move = m
-                state = new_state
+        if v > max_value:
+            max_value = v
+            best_move = m
+            state = new_state
 
-            alpha = max(alpha, max_value)
+        alpha = max(alpha, max_value)
 
-            if beta <= alpha:
-                # players.switch_player()
-                print("MAXIMIZER PRUNE")
-            # return (new_state,  players, max_value, best_move)
-                break
+        if beta <= alpha:
+            # players.switch_player()
+            print("MAXIMIZER PRUNE")
+        # return (new_state,  players, max_value, best_move)
+            break
 
         # players.switch_player()
     return (state, players, max_value, best_move)
@@ -67,30 +67,30 @@ def minimize(game_state, players, alpha, beta, move):
 
         if scored:
             (x, x,  v, max_move) = minimize(
-                new_state,  players, alpha, beta, None)
+                new_state,  players, alpha, beta, m)
 
-            if v < min_value:
-                min_value = v
-                best_move = m
-                state = new_state
+            # if v < min_value:
+            #     min_value = v
+            #     best_move = m
+            #     state = new_state
 
         else:
             players.switch_player()
             (x, x,  v, max_move) = maximize(
-                new_state,  players, alpha, beta, None)
+                new_state,  players, alpha, beta, m)
 
-            if v < min_value:
-                min_value = v
-                best_move = m
-                state = new_state
+        if v < min_value:
+            min_value = v
+            best_move = m
+            state = new_state
 
-            beta = min(beta, min_value)
+        beta = min(beta, min_value)
 
-            if beta <= alpha:
-                print("MINIMIZER PRUNE")
-            # players.switch_player()
-            # return (new_state,  players, min_value, best_move)
-                break
+        if beta <= alpha:
+            print("MINIMIZER PRUNE")
+        # players.switch_player()
+        # return (new_state,  players, min_value, best_move)
+            break
 
         # players.switch_player()
     return (state, players, min_value, best_move)
@@ -98,4 +98,4 @@ def minimize(game_state, players, alpha, beta, move):
 
 def getMove(game_state, players):
     boxes = game_state.total_boxes()
-    return maximize(game_state, players, -(boxes+1), boxes + 1, None)
+    return maximize(game_state, players, -(boxes+1), boxes + 1, game_state.get_valid_moves().pop())
