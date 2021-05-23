@@ -1,4 +1,5 @@
 import dotbox
+import numpy as np
 
 
 def maximize(game_state, players, alpha, beta, move):
@@ -31,7 +32,19 @@ def maximize(game_state, players, alpha, beta, move):
             (x, y, v, min_move) = minimize(
                 new_state, players, alpha, beta, m)
 
-        if v > max_value:
+        # if v == max_value:
+        #   swap = np.random.choice([True, False])
+        #   if swap:
+        #     max_value = v
+        #     best_move = m
+        #     state = new_state
+
+        # elif v > max_value:
+        #     max_value = v
+        #     best_move = m
+        #     state = new_state
+
+        if (v > max_value) or (v == max_value and np.random.choice([True, False])):
             max_value = v
             best_move = m
             state = new_state
@@ -50,7 +63,7 @@ def maximize(game_state, players, alpha, beta, move):
 
 def minimize(game_state, players, alpha, beta, move):
     if (game_state.is_over()):
-        v = -(game_state.state_val(players.get_current_player()))
+        v = game_state.state_val(players.get_current_player())
         print("MIN")
         print(move)
         print(v)
@@ -79,7 +92,7 @@ def minimize(game_state, players, alpha, beta, move):
             (x, x,  v, max_move) = maximize(
                 new_state,  players, alpha, beta, m)
 
-        if v < min_value:
+        if (v < min_value) or (v == min_value and np.random.choice([True, False])):
             min_value = v
             best_move = m
             state = new_state
@@ -98,4 +111,5 @@ def minimize(game_state, players, alpha, beta, move):
 
 def getMove(game_state, players):
     boxes = game_state.total_boxes()
+    print(game_state.get_valid_moves())
     return maximize(game_state, players, -(boxes+1), boxes + 1, game_state.get_valid_moves().pop())
