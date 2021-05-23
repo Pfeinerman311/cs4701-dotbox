@@ -64,7 +64,7 @@ def play_game(n, size):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        gui.SURF.fill((255, 255, 255))
+        gui.w.fill((255, 255, 255))
         gui.is_user_turn = True
         gui.disp_board()
         gui.update_pygame()
