@@ -231,7 +231,7 @@ class Grid:
     def state_val(self, player):
         tot_boxes = self.total_boxes()
         # print(tot_boxes)
-        to_win = tot_boxes/2
+        to_win = tot_boxes//2
         # print(to_win)
         scores = self.get_scores()
         # print(scores)
@@ -278,7 +278,7 @@ class Grid:
         if self.game_over():
             return True
         tot_boxes = len(self.boxes)
-        to_win = tot_boxes//2
+        to_win = tot_boxes/2
         scores = self.get_scores()
         for w in self.get_winner():
             if scores[w] > to_win:
