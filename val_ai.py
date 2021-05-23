@@ -3,11 +3,11 @@ import numpy as np
 
 
 def maximize(game_state, players, alpha, beta, move):
-    if (game_state.game_over()):
+    if (game_state.is_over()):
         v = game_state.state_val(players.get_current_player())
-        print("MAX END")
-        print(move)
-        print(v)
+        # print("MAX END")
+        # print(move)
+        # print(v)
         return (game_state, players,  v, move)
 
     max_value = -(game_state.total_boxes() + 1)
@@ -20,6 +20,9 @@ def maximize(game_state, players, alpha, beta, move):
         # print("MAX")
         # print(m)
         # print(scored)
+
+        if new_state.will_lose(players.get_current_player()):
+            break
 
         if scored:
             (x, y, v, max_move) = maximize(
@@ -55,8 +58,8 @@ def maximize(game_state, players, alpha, beta, move):
 
         if beta <= alpha:
             # players.switch_player()
-            print("MAXIMIZER PRUNE")
-        # return (new_state,  players, max_value, best_move)
+            #print("MAXIMIZER PRUNE")
+            # return (new_state,  players, max_value, best_move)
             break
 
         # players.switch_player()
@@ -64,11 +67,11 @@ def maximize(game_state, players, alpha, beta, move):
 
 
 def minimize(game_state, players, alpha, beta, move):
-    if (game_state.game_over()):
+    if (game_state.is_over()):
         v = game_state.state_val(players.get_current_player())
-        print("MIN END")
-        print(move)
-        print(v)
+        # print("MIN END")
+        # print(move)
+        # print(v)
         return (game_state, players,  v, move)
 
     min_value = game_state.total_boxes() + 1
@@ -82,6 +85,9 @@ def minimize(game_state, players, alpha, beta, move):
         # print("MIN")
         # print(m)
         # print(scored)
+
+        if new_state.will_lose(players.get_other_player()):
+            break
 
         if scored:
             (x, x,  v, max_move) = minimize(
@@ -105,9 +111,9 @@ def minimize(game_state, players, alpha, beta, move):
         beta = min(beta, min_value)
 
         if beta <= alpha:
-            print("MINIMIZER PRUNE")
-        # players.switch_player()
-        # return (new_state,  players, min_value, best_move)
+            #print("MINIMIZER PRUNE")
+            # players.switch_player()
+            # return (new_state,  players, min_value, best_move)
             break
 
         # players.switch_player()
