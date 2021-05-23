@@ -326,3 +326,18 @@ class Grid:
     def print_boxes(self):
         for k in self.boxes.keys():
             print(str(k) + ": " + str(self.boxes[k].get_owner()))
+
+    def will_lose(self, player):
+        tot_boxes = self.total_boxes()
+        to_win = tot_boxes//2
+        scores = self.get_scores()
+        for w in self.get_winner():
+            if scores[w] > to_win:
+                if w != player:
+                    return True
+        threes = [k for k in self.boxes.keys() if self.check_box(k) == 3]
+        num_threes = len(threes)
+        opp = [v for k, v in scores.items() if k != player and k != None]
+        if opp[0] + num_threes > to_win:
+            return True
+        return False
