@@ -128,18 +128,21 @@ def play_game(n, size, ai_game):
 
 # Start of game:
 def main():
-    print("Welcome to Dots and Boxes.")
-    print("How many players are playing?")
-    n = input()
-    print("What size game would you like to play?")
-    print("Type 2 for a 2x2, 3 for a 3x3 or 4 for a 4x4 grid!")
-    size = input()
-    print("Would you like to test the AI? Type Yes or No!")
-    ai_game = input()
-    if ai_game == "Yes":
-        play_game(n, int(size), True)
-    else:
-        play_game(n, int(size), False)
+    # print("Welcome to Dots and Boxes.")
+    # print("How many players are playing?")
+    # n = input()
+    # print("What size game would you like to play?")
+    # print("Type 2 for a 2x2, 3 for a 3x3 or 4 for a 4x4 grid!")
+    # size = input()
+    # print("Would you like to test the AI? Type Yes or No!")
+    # ai_game = input()
+    # if ai_game == "Yes":
+    #     play_game(n, int(size), True)
+    # else:
+    #     play_game(n, int(size), False)
+    for i in range(30):
+
+        play_game(2, 4, True)
 
 
 if __name__ == "__main__":
